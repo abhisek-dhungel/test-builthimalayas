@@ -53,21 +53,15 @@ export function NewsAdminPanel({
     setUploading(true);
     onError("");
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-        credentials: "same-origin",
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        onError(data.error || "Image upload failed.");
+      const { uploadMediaFile } = await import("@/lib/uploadMedia");
+      const result = await uploadMediaFile(file);
+      if (!result?.path) {
+        onError("Image upload failed.");
         return;
       }
-      setImagePath(data.path);
-    } catch {
-      onError("Image upload failed.");
+      setImagePath(result.path);
+    } catch (err) {
+      onError(err instanceof Error ? err.message : "Image upload failed.");
     } finally {
       setUploading(false);
     }

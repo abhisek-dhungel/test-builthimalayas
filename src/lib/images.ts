@@ -1,3 +1,5 @@
+import { isMediaPath } from "./mediaPaths";
+
 const MAX_LISTING_PHOTOS = 4;
 
 export function parseImagePaths(
@@ -50,13 +52,11 @@ export function getGalleryPaths(
 export function isValidImagePaths(paths: unknown): paths is string[] {
   if (!Array.isArray(paths)) return false;
   if (paths.length > MAX_LISTING_PHOTOS) return false;
-  return paths.every(
-    (path) => typeof path === "string" && path.startsWith("/uploads/"),
-  );
+  return paths.every((path) => isMediaPath(path));
 }
 
 export const MAX_LISTING_PHOTO_COUNT = MAX_LISTING_PHOTOS;
 
 export function isValidVideoPath(path: unknown): path is string {
-  return typeof path === "string" && path.startsWith("/uploads/");
+  return isMediaPath(path);
 }

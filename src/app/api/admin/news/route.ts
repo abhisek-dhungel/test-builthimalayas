@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isAdminAuthenticated } from "@/lib/auth";
 import { dbAll, dbRun } from "@/lib/database";
+import { isMediaPath } from "@/lib/mediaPaths";
 import type { NewsItem } from "@/lib/types";
-
-function isValidUploadPath(path: unknown): path is string {
-  return typeof path === "string" && path.startsWith("/uploads/");
-}
 
 export async function GET() {
   const authed = await isAdminAuthenticated();
@@ -48,7 +45,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (imagePath !== null && !isValidUploadPath(imagePath)) {
+    if (imagePath !== null && !isMediaPath(imagePath)) {
       return NextResponse.json(
         { error: "Invalid image path." },
         { status: 400 },

@@ -10,7 +10,17 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: projectRoot,
   },
-  // Allow property video uploads (up to ~100MB) through route handlers.
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/**",
+      },
+    ],
+  },
+  // Allow property video uploads (up to ~100MB) through route handlers (local/dev).
+  // On Vercel, large videos go direct to Cloudinary from the browser.
   experimental: {
     proxyClientMaxBodySize: "105mb",
   },

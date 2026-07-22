@@ -110,9 +110,9 @@ async function runMigrationsMysql() {
       name VARCHAR(255) NOT NULL,
       phone VARCHAR(50) NOT NULL,
       role ENUM('agent', 'homeowner') NOT NULL,
-      image_path VARCHAR(500) NULL,
+      image_path TEXT NULL,
       image_paths TEXT NULL,
-      video_path VARCHAR(500) NULL,
+      video_path TEXT NULL,
       status ENUM('pending', 'active', 'stopped', 'taken') NOT NULL DEFAULT 'pending',
       featured TINYINT(1) NOT NULL DEFAULT 0,
       created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -196,7 +196,7 @@ async function runMigrationsMysql() {
       id INT AUTO_INCREMENT PRIMARY KEY,
       heading VARCHAR(255) NOT NULL DEFAULT '',
       body TEXT NOT NULL,
-      image_path VARCHAR(500) NULL,
+      image_path TEXT NULL,
       status ENUM('active', 'stopped') NOT NULL DEFAULT 'active',
       created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
@@ -266,6 +266,16 @@ async function runMigrationsMysql() {
         `ALTER TABLE listings ADD COLUMN video_path VARCHAR(500) NULL`,
       );
     }
+    // Cloudinary URLs can be long — widen media columns when still VARCHAR(500).
+    await pool.execute(
+      `ALTER TABLE listings MODIFY image_path TEXT NULL`,
+    ).catch(() => undefined);
+    await pool.execute(
+      `ALTER TABLE listings MODIFY video_path TEXT NULL`,
+    ).catch(() => undefined);
+    await pool.execute(
+      `ALTER TABLE news MODIFY image_path TEXT NULL`,
+    ).catch(() => undefined);
   }
 }
 

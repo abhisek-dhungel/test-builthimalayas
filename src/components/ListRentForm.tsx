@@ -87,18 +87,11 @@ export function ListRentForm() {
     setError("");
 
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const res = await fetch("/api/upload", { method: "POST", body: formData });
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error || "Image upload failed");
-        return null;
-      }
-      return data.path as string;
-    } catch {
-      setError("Image upload failed");
+      const { uploadMediaFile } = await import("@/lib/uploadMedia");
+      const result = await uploadMediaFile(file);
+      return result?.path ?? null;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Image upload failed");
       return null;
     } finally {
       setUploadingImage(false);
@@ -110,18 +103,11 @@ export function ListRentForm() {
     setError("");
 
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const res = await fetch("/api/upload", { method: "POST", body: formData });
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error || "Video upload failed");
-        return null;
-      }
-      return data.path as string;
-    } catch {
-      setError("Video upload failed");
+      const { uploadMediaFile } = await import("@/lib/uploadMedia");
+      const result = await uploadMediaFile(file);
+      return result?.path ?? null;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Video upload failed");
       return null;
     } finally {
       setUploadingVideo(false);

@@ -2,21 +2,18 @@ import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import { isAdminAuthenticated } from "@/lib/auth";
 import { dbGet, dbRun, resolvePublicImagePath } from "@/lib/database";
+import { isMediaPath } from "@/lib/mediaPaths";
 import type { NewsItem } from "@/lib/types";
 
 type Params = { params: Promise<{ id: string }> };
 
-function isValidUploadPath(path: unknown): path is string {
-  return typeof path === "string" && path.startsWith("/uploads/");
-}
-
 async function tryDeleteImage(imagePath: string | null | undefined) {
-  if (!imagePath) return;
+  if (!imagePath || !imagePath.startsWith("/uploads/")) return;
   try {
     const fullPath = resolvePublicImagePath(imagePath);
     if (fs.existsSync(fullPath)) fs.unlinkSync(fullPath);
   } catch {
-    // Ignore on read-only filesystems
+    // Ignore on read-only filesystems / Cloudinary URLs
   }
 }
 
@@ -75,7 +72,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
       if (payload.image_path !== undefined) {
         if (payload.image_path === null || payload.image_path === "") {
           nextImage = null;
-        } else if (isValidUploadPath(payload.image_path)) {
+        } else if (isMediaPath(payload.image_path)) {
           nextImage = payload.image_path;
         } else {
           return NextResponse.json(
