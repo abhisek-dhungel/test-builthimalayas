@@ -1,12 +1,18 @@
-name: Build cPanel deploy zip
+name: Build cPanel branch
+
+# Builds a Linux-ready app and pushes it to the `cpanel` branch.
+# On the server: clone/pull ONLY the `cpanel` branch (no npm install).
 
 on:
   workflow_dispatch:
   push:
     branches: [main]
 
+permissions:
+  contents: write
+
 jobs:
-  package:
+  package-and-push:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -24,15 +30,36 @@ jobs:
       - name: Build Next.js (standalone)
         run: npm run build
 
-      - name: Package for cPanel
+      - name: Package deploy folder
         run: |
           chmod +x scripts/package-cpanel.sh
           scripts/package-cpanel.sh
+          # Unzip into a clean tree for the cpanel branch
+          rm -rf /tmp/cpanel-branch
+          mkdir -p /tmp/cpanel-branch
+          unzip -q cpanel-deploy.zip -d /tmp/cpanel-branch
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: cpanel-deploy
-          path: cpanel-deploy.zip
-          if-no-files-found: error
-          retention-days: 14
+      - name: Publish cpanel branch
+        run: |
+          set -euo pipefail
+          cd /tmp/cpanel-branch
+          git init
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b cpanel
+          # Keep uploads dir but ignore uploaded files if any
+          mkdir -p public/uploads
+          touch public/uploads/.gitkeep
+          cat > .gitignore <<'EOF'
+          .env
+          .env.local
+          .env.production
+          public/uploads/*
+          !public/uploads/.gitkeep
+          EOF
+          git add -A
+          git commit -m "cPanel deploy build $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push -f origin cpanel
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
