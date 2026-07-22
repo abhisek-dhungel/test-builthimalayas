@@ -40,11 +40,18 @@ function getMysqlConfig() {
 function getPool() {
   if (!globalStore.__mysqlPool) {
     const config = getMysqlConfig();
+    const sslEnabled =
+      process.env.MYSQL_SSL?.trim().toLowerCase() === "true" ||
+      process.env.MYSQL_SSL?.trim() === "1";
     globalStore.__mysqlPool = mysql.createPool({
       ...config,
       waitForConnections: true,
-      connectionLimit: 10,
+      connectionLimit: 5,
+      connectTimeout: 15000,
       timezone: "+00:00",
+      ...(sslEnabled
+        ? { ssl: { rejectUnauthorized: false } }
+        : {}),
     });
   }
   return globalStore.__mysqlPool;
@@ -59,6 +66,11 @@ function getSqlitePath() {
 }
 
 function getSqlite() {
+  if (process.env.VERCEL || process.env.DATABASE_DRIVER === "mysql") {
+    throw new Error(
+      "SQLite is not available on this host. Set DATABASE_DRIVER=mysql and MySQL env vars.",
+    );
+  }
   if (!globalStore.__sqlite) {
     // Lazy-load so MySQL-only cPanel deploys do not need the native module at boot.
     // eslint-disable-next-line @typescript-eslint/no-require-imports

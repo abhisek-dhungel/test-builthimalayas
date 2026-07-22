@@ -48,6 +48,7 @@ MYSQL_PORT=3306
 MYSQL_USER=...
 MYSQL_PASSWORD=...
 MYSQL_DATABASE=...
+MYSQL_SSL=true
 
 CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
@@ -56,8 +57,17 @@ NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=your_cloud_name
 NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET=your_unsigned_preset_name
 ```
 
+`MYSQL_SSL=true` is usually required for Railway / Aiven / cloud MySQL.
+
 5. Deploy  
 6. Open the Vercel URL → test list property with photo/video  
+
+## If you see “This page couldn’t load”
+
+1. Vercel → Project → **Settings → Environment Variables**  
+   Confirm `DATABASE_DRIVER=mysql` and all `MYSQL_*` values  
+2. Add `MYSQL_SSL=true` if missing, then **Redeploy**  
+3. Vercel → **Deployments** → latest → **Logs** / **Functions** for the exact error  
 
 ## Local development
 
