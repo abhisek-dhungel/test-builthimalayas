@@ -201,8 +201,7 @@ export function ListRentForm() {
               </div>
               <h2>Listing submitted!</h2>
               <p>
-                Your property is now pending review and will appear once
-                approved.
+                Your property is live and now visible in listings.
               </p>
             </div>
           ) : (

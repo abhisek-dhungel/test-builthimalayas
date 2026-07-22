@@ -159,7 +159,7 @@ export async function POST(request: NextRequest) {
         district, place, landmark, property_type, property_details, price,
         parking_two_wheeler, parking_four_wheeler, other_facilities,
         name, phone, role, image_path, image_paths, video_path, status
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active')`,
       [
         district,
         place,
