@@ -89,6 +89,7 @@ export function HomeDesign({ featuredListings, newsItems }: HomeDesignProps) {
   const newsTrackRef = useRef<HTMLDivElement>(null);
   const [canScrollNewsPrev, setCanScrollNewsPrev] = useState(false);
   const [canScrollNewsNext, setCanScrollNewsNext] = useState(false);
+  const [openMapArea, setOpenMapArea] = useState<string | null>(null);
 
   const newestListings = useMemo(
     () => featuredListings.slice(0, 4),
@@ -605,13 +606,23 @@ export function HomeDesign({ featuredListings, newsItems }: HomeDesignProps) {
                   {area.name}
                 </Link>
                 <div className="service-area-map">
-                  <iframe
-                    title={`Map of ${area.name}, Kathmandu`}
-                    src={mapEmbedSrc(area)}
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    allowFullScreen
-                  />
+                  {openMapArea === area.name ? (
+                    <iframe
+                      title={`Map of ${area.name}, Kathmandu`}
+                      src={mapEmbedSrc(area)}
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      allowFullScreen
+                    />
+                  ) : (
+                    <button
+                      type="button"
+                      className="service-area-map-btn"
+                      onClick={() => setOpenMapArea(area.name)}
+                    >
+                      Show map
+                    </button>
+                  )}
                 </div>
               </article>
             ))}

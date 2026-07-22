@@ -922,6 +922,30 @@
   display: block;
 }
 
+.home-design .service-area-map-btn {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  border: 0;
+  background:
+    linear-gradient(180deg, rgba(21, 51, 80, 0.08), rgba(21, 51, 80, 0.18)),
+    var(--hd-bronze-pale);
+  color: var(--hd-navy);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.home-design .service-area-map-btn:hover {
+  color: #fff;
+  background: var(--hd-navy);
+}
+
 /* ---------- HOME NEWS ---------- */
 .home-design .home-news {
   background: var(--hd-cream);

@@ -275,19 +275,9 @@ async function runMigrationsMysql() {
     }
     if (!columns.has("video_path")) {
       await pool.execute(
-        `ALTER TABLE listings ADD COLUMN video_path VARCHAR(500) NULL`,
+        `ALTER TABLE listings ADD COLUMN video_path TEXT NULL`,
       );
     }
-    // Cloudinary URLs can be long — widen media columns when still VARCHAR(500).
-    await pool.execute(
-      `ALTER TABLE listings MODIFY image_path TEXT NULL`,
-    ).catch(() => undefined);
-    await pool.execute(
-      `ALTER TABLE listings MODIFY video_path TEXT NULL`,
-    ).catch(() => undefined);
-    await pool.execute(
-      `ALTER TABLE news MODIFY image_path TEXT NULL`,
-    ).catch(() => undefined);
   }
 }
 
@@ -474,16 +464,16 @@ async function seedAdminUser() {
 }
 
 export async function ensureDatabase() {
+  if (globalStore.__dbReady) return;
+
   if (useMysql()) {
     await runMigrationsMysql();
   } else {
     runMigrationsSqlite();
   }
 
-  if (!globalStore.__dbReady) {
-    await seedAdminUser();
-    globalStore.__dbReady = true;
-  }
+  await seedAdminUser();
+  globalStore.__dbReady = true;
 }
 
 export async function dbAll<T>(

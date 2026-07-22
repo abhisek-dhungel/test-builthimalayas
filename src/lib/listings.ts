@@ -73,14 +73,20 @@ export function toPublicListingCard(
 
 const PUBLIC_LISTING_STATUSES = "('active', 'taken')";
 
+const LISTING_CARD_COLUMNS = `
+  id, district, place, landmark, property_type, property_details, price,
+  parking_two_wheeler, parking_four_wheeler, image_path, status, featured, created_at
+`;
+
 export async function getActiveListings(): Promise<PublicListing[]> {
   const listings = await dbAll<Record<string, unknown>>(
-    `SELECT * FROM listings
+    `SELECT ${LISTING_CARD_COLUMNS} FROM listings
      WHERE status IN ${PUBLIC_LISTING_STATUSES}
      ORDER BY
        CASE status WHEN 'active' THEN 0 ELSE 1 END,
        featured DESC,
-       created_at DESC`,
+       created_at DESC
+     LIMIT 200`,
   );
 
   return listings.map((row) => toPublicListingCard(row));
@@ -102,13 +108,28 @@ export type BrowseSection = "featured" | "kathmandu" | "lalitpur" | "bhaktapur";
 export async function getListingsForSection(
   section: BrowseSection,
 ): Promise<PublicListing[]> {
-  const all = await getActiveListings();
-
   if (section === "featured") {
-    return all.filter((l) => l.featured === 1);
+    const listings = await dbAll<Record<string, unknown>>(
+      `SELECT ${LISTING_CARD_COLUMNS} FROM listings
+       WHERE status IN ${PUBLIC_LISTING_STATUSES} AND featured = 1
+       ORDER BY created_at DESC
+       LIMIT 24`,
+    );
+    return listings.map((row) => toPublicListingCard(row));
   }
 
-  return all.filter((l) => l.district === section && l.featured === 0);
+  const listings = await dbAll<Record<string, unknown>>(
+    `SELECT ${LISTING_CARD_COLUMNS} FROM listings
+     WHERE status IN ${PUBLIC_LISTING_STATUSES}
+       AND featured = 0
+       AND district = ?
+     ORDER BY
+       CASE status WHEN 'active' THEN 0 ELSE 1 END,
+       created_at DESC
+     LIMIT 48`,
+    [section],
+  );
+  return listings.map((row) => toPublicListingCard(row));
 }
 
 export function getSectionTitle(section: BrowseSection): string {

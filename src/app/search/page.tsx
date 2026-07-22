@@ -3,7 +3,7 @@ import { SearchBrowse } from "@/components/SearchBrowse";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getActiveListings } from "@/lib/listings";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export default async function SearchPage() {
   const listings = await getActiveListings();

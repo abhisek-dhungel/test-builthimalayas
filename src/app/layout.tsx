@@ -1,41 +1,21 @@
 import type { Metadata, Viewport } from "next";
-import {
-  Cormorant_Garamond,
-  Fraunces,
-  Geist,
-  Geist_Mono,
-  Inter,
-} from "next/font/google";
+import { Fraunces, Inter } from "next/font/google";
 import { SiteFooterGate } from "@/components/SiteFooterGate";
 import "./globals.css";
 import "./home-design.css";
 import "./search-browse.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const cormorant = Cormorant_Garamond({
-  variable: "--font-serif",
-  subsets: ["latin"],
-  weight: ["500", "600"],
-});
-
 const homeSans = Inter({
   variable: "--font-home-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const homeSerif = Fraunces({
   variable: "--font-home-serif",
   subsets: ["latin"],
   weight: ["500", "700", "800", "900"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -96,7 +76,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} ${homeSans.variable} ${homeSerif.variable} h-full antialiased`}
+      className={`${homeSans.variable} ${homeSerif.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
         <div className="flex min-h-0 flex-1 flex-col">{children}</div>
