@@ -46,5 +46,6 @@ next-env.d.ts
 /public/uploads/*
 !/public/uploads/.gitkeep
 rent-kathmandu.zip
+next-build.zip
 cpanel-deploy.zip
 /cpanel-deploy/

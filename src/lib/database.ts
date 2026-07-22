@@ -163,6 +163,7 @@ async function runMigrationsMysql() {
       phone VARCHAR(50) NOT NULL UNIQUE,
       address TEXT NULL,
       password_hash VARCHAR(255) NOT NULL,
+      blocked TINYINT(1) NOT NULL DEFAULT 0,
       created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
   `);

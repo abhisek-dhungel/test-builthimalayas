@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:zip": "rm -rf .next && npm run build && rm -f next-build.zip && zip -r next-build.zip .next -x '*.next/cache/*' -x '*.next/dev/*'",
     "start": "node server.js",
     "start:next": "next start",
     "lint": "eslint"

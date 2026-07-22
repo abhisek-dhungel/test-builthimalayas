@@ -1,4 +1,7 @@
--- Import this file in cPanel phpMyAdmin after creating your database.
+-- Optional reference schema.
+-- You do NOT need to import this in cPanel.
+-- Create an empty MySQL database + user, set MYSQL_* in .env,
+-- and the app creates all tables automatically on startup.
 
 CREATE TABLE IF NOT EXISTS listings (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -79,5 +82,14 @@ CREATE TABLE IF NOT EXISTS inquiries (
   phone VARCHAR(50) NOT NULL,
   remarks TEXT NULL,
   status ENUM('new', 'contacted', 'closed') NOT NULL DEFAULT 'new',
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS news (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  heading VARCHAR(255) NOT NULL DEFAULT '',
+  body TEXT NOT NULL,
+  image_path VARCHAR(500) NULL,
+  status ENUM('active', 'stopped') NOT NULL DEFAULT 'active',
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
