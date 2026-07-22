@@ -9,11 +9,17 @@ import type { NewsItem } from "@/lib/types";
 export const dynamic = "force-dynamic";
 
 export default async function NewsPage() {
-  const items = await dbAll<NewsItem>(
-    `SELECT * FROM news
-     WHERE status = 'active'
-     ORDER BY created_at DESC`,
-  );
+  let items: NewsItem[] = [];
+  try {
+    items = await dbAll<NewsItem>(
+      `SELECT id, heading, body, image_path, status, created_at FROM news
+       WHERE status = 'active'
+       ORDER BY created_at DESC
+       LIMIT 100`,
+    );
+  } catch (error) {
+    console.error("NewsPage data load failed:", error);
+  }
 
   return (
     <>

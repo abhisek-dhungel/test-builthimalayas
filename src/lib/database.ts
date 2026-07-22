@@ -49,6 +49,8 @@ function getPool() {
       connectionLimit: 5,
       connectTimeout: 15000,
       timezone: "+00:00",
+      // Keep DATETIME as strings so server components match SQLite + types.
+      dateStrings: true,
       ...(sslEnabled
         ? { ssl: { rejectUnauthorized: false } }
         : {}),

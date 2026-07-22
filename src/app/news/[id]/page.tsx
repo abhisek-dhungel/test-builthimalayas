@@ -13,10 +13,20 @@ type Props = { params: Promise<{ id: string }> };
 
 export default async function NewsDetailPage({ params }: Props) {
   const { id } = await params;
-  const item = await dbGet<NewsItem>(
-    `SELECT * FROM news WHERE id = ? AND status = 'active'`,
-    [Number(id)],
-  );
+  const newsId = Number(id);
+  if (!Number.isFinite(newsId) || newsId <= 0) notFound();
+
+  let item: NewsItem | undefined;
+  try {
+    item = await dbGet<NewsItem>(
+      `SELECT id, heading, body, image_path, status, created_at FROM news
+       WHERE id = ? AND status = 'active'`,
+      [newsId],
+    );
+  } catch (error) {
+    console.error("NewsDetailPage data load failed:", error);
+    throw error;
+  }
 
   if (!item) notFound();
 
