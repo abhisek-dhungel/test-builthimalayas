@@ -1,0 +1,38 @@
+name: Build cPanel deploy zip
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Next.js (standalone)
+        run: npm run build
+
+      - name: Package for cPanel
+        run: |
+          chmod +x scripts/package-cpanel.sh
+          scripts/package-cpanel.sh
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cpanel-deploy
+          path: cpanel-deploy.zip
+          if-no-files-found: error
+          retention-days: 14

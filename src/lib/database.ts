@@ -1,5 +1,4 @@
 import bcrypt from "bcryptjs";
-import Database from "better-sqlite3";
 import fs from "fs";
 import mysql, {
   type Pool,
@@ -9,10 +8,11 @@ import mysql, {
 import path from "path";
 
 type SqlArgs = (string | number | null)[];
+type SqliteDatabase = import("better-sqlite3").Database;
 
 const globalStore = globalThis as typeof globalThis & {
   __mysqlPool?: Pool;
-  __sqlite?: Database.Database;
+  __sqlite?: SqliteDatabase;
   __dbReady?: boolean;
 };
 
@@ -60,6 +60,9 @@ function getSqlitePath() {
 
 function getSqlite() {
   if (!globalStore.__sqlite) {
+    // Lazy-load so MySQL-only cPanel deploys do not need the native module at boot.
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const Database = require("better-sqlite3") as typeof import("better-sqlite3");
     const db = new Database(getSqlitePath());
     db.pragma("journal_mode = WAL");
     globalStore.__sqlite = db;
