@@ -494,7 +494,7 @@ export function ListRentForm() {
                   </Field>
 
                   <Field
-                    label="Property photos (optional, up to 4)"
+                    label="Property photos (optional, up to 5)"
                     className="span-2"
                   >
                     <PropertyPhotoPicker

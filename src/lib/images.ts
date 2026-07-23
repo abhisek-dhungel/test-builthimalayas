@@ -1,6 +1,6 @@
 import { isMediaPath } from "./mediaPaths";
 
-const MAX_LISTING_PHOTOS = 4;
+const MAX_LISTING_PHOTOS = 5;
 
 export function parseImagePaths(
   value: unknown,

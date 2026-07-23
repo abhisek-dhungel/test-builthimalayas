@@ -19,7 +19,7 @@ type PropertyPhotoPickerProps = {
   variant?: "default" | "glass";
 };
 
-const MAX_PHOTOS = 4;
+const MAX_PHOTOS = 5;
 
 export function PropertyPhotoPicker({
   photos,
@@ -52,7 +52,7 @@ export function PropertyPhotoPicker({
 
   function openCamera() {
     if (atLimit) {
-      onError("You can add up to 4 photos.");
+      onError("You can add up to 5 photos.");
       return;
     }
     cameraInputRef.current?.click();
@@ -60,7 +60,7 @@ export function PropertyPhotoPicker({
 
   function openUpload() {
     if (atLimit) {
-      onError("You can add up to 4 photos.");
+      onError("You can add up to 5 photos.");
       return;
     }
     uploadInputRef.current?.click();
@@ -106,10 +106,10 @@ export function PropertyPhotoPicker({
             : "text-[10px] text-[var(--muted)]"
         }
       >
-        Add up to 4 photos. Tap a photo to set it as the display photo.
+        Add up to 5 photos. Tap a photo to mark it as Show.
       </p>
 
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-5 gap-2">
         {slots.map((photo, index) => {
           if (photo) {
             const isDisplay = index === displayIndex;
@@ -140,7 +140,7 @@ export function PropertyPhotoPicker({
                 </button>
                 {isDisplay && (
                   <span className="absolute bottom-1 left-1 right-1 rounded bg-black/70 px-1 py-0.5 text-center text-[8px] font-semibold uppercase tracking-wide text-white">
-                    Display
+                    Show
                   </span>
                 )}
                 <button
