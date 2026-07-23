@@ -1544,16 +1544,6 @@
   letter-spacing: 0.3px;
 }
 
-.home-design .footer-powered a {
-  color: var(--hd-bronze-light);
-  font-weight: 700;
-  transition: color 0.15s ease;
-}
-
-.home-design .footer-powered a:hover {
-  color: #fff;
-}
-
 .home-design .footer-social-block {
   grid-column: auto;
 }
