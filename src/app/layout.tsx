@@ -19,7 +19,7 @@ const homeSerif = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "BUILT Himalayas | Premium Rentals",
+  title: "BUILT Himalayas | Building Nations Serving People",
   description:
     "Browse and list premium rental homes across Kathmandu Valley.",
   applicationName: "BUILT Himalayas",
