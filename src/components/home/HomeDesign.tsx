@@ -9,8 +9,10 @@ import {
   useMemo,
   useRef,
   useState,
+  useTransition,
 } from "react";
 import { BuiltLogo } from "@/components/BuiltLogo";
+import { LogoFlipLoader } from "@/components/LogoFlipLoader";
 import { VerifiedListingCard } from "@/components/home/VerifiedListingCard";
 import { PLACES } from "@/lib/locations";
 import {
@@ -89,6 +91,7 @@ export function HomeDesign({ featuredListings, newsItems }: HomeDesignProps) {
   const newsTrackRef = useRef<HTMLDivElement>(null);
   const [canScrollNewsPrev, setCanScrollNewsPrev] = useState(false);
   const [canScrollNewsNext, setCanScrollNewsNext] = useState(false);
+  const [isSearchPending, startSearchTransition] = useTransition();
 
   const newestListings = useMemo(
     () => featuredListings.slice(0, 4),
@@ -213,15 +216,17 @@ export function HomeDesign({ featuredListings, newsItems }: HomeDesignProps) {
   }, []);
 
   function runSearch() {
-    router.push(
-      buildSearchHref({
-        area,
-        propertyType,
-        spaceType,
-        price: hasPrice ? priceValue : null,
-        sort: sortBy,
-      }),
-    );
+    startSearchTransition(() => {
+      router.push(
+        buildSearchHref({
+          area,
+          propertyType,
+          spaceType,
+          price: hasPrice ? priceValue : null,
+          sort: sortBy,
+        }),
+      );
+    });
   }
 
   async function logout() {
@@ -246,6 +251,7 @@ export function HomeDesign({ featuredListings, newsItems }: HomeDesignProps) {
 
   return (
     <div className="home-design">
+      {isSearchPending ? <LogoFlipLoader label="Loading search" /> : null}
       <header className="top">
         <div className="top-row">
           <Link href="/" className="brand">
@@ -481,7 +487,13 @@ export function HomeDesign({ featuredListings, newsItems }: HomeDesignProps) {
               )}
             </div>
 
-            <button type="button" className="btn-search" onClick={runSearch}>
+            <button
+              type="button"
+              className="btn-search"
+              onClick={runSearch}
+              disabled={isSearchPending}
+              aria-busy={isSearchPending}
+            >
               <svg
                 viewBox="0 0 24 24"
                 fill="none"

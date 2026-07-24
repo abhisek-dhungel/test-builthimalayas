@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useId } from "react";
 
 type BuiltLogoProps = {
   size?: "sm" | "md" | "lg";
@@ -18,6 +19,9 @@ export function BuiltLogo({
   className = "",
 }: BuiltLogoProps) {
   const s = sizes[size];
+  const uid = useId().replace(/:/g, "");
+  const gradientId = `triangleMetal-${uid}`;
+  const shadowId = `triangleShadow-${uid}`;
 
   return (
     <div className={`flex flex-col items-center ${className}`}>
@@ -30,22 +34,28 @@ export function BuiltLogo({
         className="built-logo-triangle"
       >
         <defs>
-          <linearGradient id="triangleMetal" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#D4AF37" />
             <stop offset="45%" stopColor="#B08D57" />
             <stop offset="100%" stopColor="#7A5C32" />
           </linearGradient>
-          <filter id="triangleShadow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="3" stdDeviation="2" floodColor="#5D4037" floodOpacity="0.45" />
+          <filter id={shadowId} x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow
+              dx="0"
+              dy="3"
+              stdDeviation="2"
+              floodColor="#5D4037"
+              floodOpacity="0.45"
+            />
           </filter>
         </defs>
         <path
           d="M50 8 L92 82 L8 82 Z"
-          stroke="url(#triangleMetal)"
+          stroke={`url(#${gradientId})`}
           strokeWidth="10"
           strokeLinejoin="round"
           fill="none"
-          filter="url(#triangleShadow)"
+          filter={`url(#${shadowId})`}
         />
       </svg>
 

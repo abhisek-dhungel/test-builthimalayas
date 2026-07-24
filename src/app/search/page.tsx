@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { LogoFlipLoader } from "@/components/LogoFlipLoader";
 import { SearchBrowse } from "@/components/SearchBrowse";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getActiveListings } from "@/lib/listings";
@@ -11,15 +12,7 @@ export default async function SearchPage() {
   return (
     <>
       <SiteHeader showBack />
-      <Suspense
-        fallback={
-          <main className="search-browse flex-1">
-            <div className="search-browse-inner">
-              <p className="text-sm text-[var(--muted)]">Loading search…</p>
-            </div>
-          </main>
-        }
-      >
+      <Suspense fallback={<LogoFlipLoader label="Loading search" />}>
         <SearchBrowse listings={listings} />
       </Suspense>
     </>

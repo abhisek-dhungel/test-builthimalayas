@@ -175,6 +175,57 @@ body {
   filter: drop-shadow(0 3px 4px rgba(93, 64, 55, 0.3));
 }
 
+/* Full-screen flipping BUILT logo while navigating / loading */
+.logo-flip-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 50% 40%, rgba(255, 248, 235, 0.95), transparent 55%),
+    rgba(253, 250, 245, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.logo-flip-loader-stage {
+  perspective: 900px;
+}
+
+.logo-flip-loader-spin {
+  transform-style: preserve-3d;
+  animation: logoFlipY 1.15s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes logoFlipY {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-flip-loader-spin {
+    animation: logoPulseSoft 1.4s ease-in-out infinite;
+  }
+
+  @keyframes logoPulseSoft {
+    0%,
+    100% {
+      opacity: 0.75;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.04);
+    }
+  }
+}
+
 .home-btn {
   display: block;
   width: 100%;
