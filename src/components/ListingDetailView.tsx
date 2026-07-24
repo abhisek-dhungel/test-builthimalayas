@@ -153,7 +153,7 @@ export function ListingDetailView({ listing }: { listing: PublicListing }) {
                 onClick={() => setShowVisit(true)}
                 className="w-full rounded-xl bg-[var(--primary)] py-3.5 text-sm font-semibold text-white transition hover:bg-[var(--primary-light)] lg:py-4 lg:text-base"
               >
-                I want to visit
+                Book a Visit
               </button>
             )}
           </div>

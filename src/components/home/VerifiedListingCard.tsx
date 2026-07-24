@@ -67,7 +67,7 @@ export function VerifiedListingCard({ listing }: { listing: PublicListing }) {
               className="btn-visit"
               onClick={() => setShowVisit(true)}
             >
-              I want to visit
+              Book a Visit
             </button>
           )}
         </div>

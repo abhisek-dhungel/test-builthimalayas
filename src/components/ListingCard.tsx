@@ -99,7 +99,7 @@ export function ListingCard({ listing, layout = "grid" }: ListingCardProps) {
               onClick={() => setShowVisit(true)}
               className="w-full rounded-xl bg-[var(--primary)] py-2.5 text-sm font-semibold text-white transition active:scale-[0.98] lg:py-3"
             >
-              I want to visit
+              Book a Visit
             </button>
           )}
         </div>
