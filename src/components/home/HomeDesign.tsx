@@ -264,12 +264,28 @@ export function HomeDesign({ featuredListings, newsItems }: HomeDesignProps) {
             </span>
           </Link>
           <div className="header-actions">
+            <Link href="/list" className="btn-list-property btn-list-property--sm">
+              List Your Property
+            </Link>
             {user ? (
               <button type="button" className="btn-login" onClick={logout}>
                 Logout
               </button>
             ) : (
               <Link href="/login?next=/" className="btn-login">
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden
+                >
+                  <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                  <path d="M12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
                 Log In
               </Link>
             )}
@@ -286,8 +302,8 @@ export function HomeDesign({ featuredListings, newsItems }: HomeDesignProps) {
               Quick &nbsp;·&nbsp; Convenient &nbsp;·&nbsp; Credible
             </div>
           </div>
-          <Link href="/list" className="btn-list-property">
-            List Your Property
+          <Link href="/custom-order" className="btn-list-property">
+            Personalized Order
             <svg
               viewBox="0 0 24 24"
               fill="none"
@@ -424,7 +440,7 @@ export function HomeDesign({ featuredListings, newsItems }: HomeDesignProps) {
                     onChange={(e) => setPriceInput(e.target.value)}
                     autoFocus
                   />
-                  <p>Shows listings within ±10% of this price.</p>
+                  <p>Shows listings within ±20% of this price.</p>
                 </div>
               )}
             </div>
@@ -604,7 +620,7 @@ export function HomeDesign({ featuredListings, newsItems }: HomeDesignProps) {
       <section className="service-areas">
         <div className="service-areas-inner">
           <div className="service-areas-head">
-            <div className="service-areas-eyebrow">Where we cover</div>
+            <div className="service-areas-eyebrow">Where we serve</div>
             <h2 className="service-areas-title">Service Areas</h2>
           </div>
           <div className="service-areas-grid">

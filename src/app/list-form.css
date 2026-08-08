@@ -355,6 +355,13 @@
   color: #b91c1c;
 }
 
+.list-form-error-field {
+  margin-top: 0.35rem;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: #b91c1c;
+}
+
 .list-form-submit {
   position: relative;
   z-index: 1;

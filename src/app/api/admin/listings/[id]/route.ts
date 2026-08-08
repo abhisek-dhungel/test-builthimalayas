@@ -66,6 +66,13 @@ export async function PATCH(request: NextRequest, { params }: Params) {
       return NextResponse.json({ success: true });
     }
 
+    if (body.action === "contacted") {
+      await dbRun("UPDATE listings SET status = 'contacted' WHERE id = ?", [
+        Number(id),
+      ]);
+      return NextResponse.json({ success: true });
+    }
+
     if (body.action === "reject") {
       await tryDeleteListingImages(listing);
       await dbRun("DELETE FROM listings WHERE id = ?", [Number(id)]);

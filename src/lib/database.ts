@@ -127,8 +127,9 @@ async function runMigrationsMysql() {
       image_path TEXT NULL,
       image_paths TEXT NULL,
       video_path TEXT NULL,
-      status ENUM('pending', 'active', 'stopped', 'taken') NOT NULL DEFAULT 'pending',
+      status ENUM('pending', 'active', 'stopped', 'taken', 'contacted') NOT NULL DEFAULT 'pending',
       featured TINYINT(1) NOT NULL DEFAULT 0,
+      property_code INT NULL,
       created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
   `);
@@ -280,6 +281,41 @@ async function runMigrationsMysql() {
         `ALTER TABLE listings ADD COLUMN video_path TEXT NULL`,
       );
     }
+    if (!columns.has("property_code")) {
+      await pool.execute(
+        `ALTER TABLE listings ADD COLUMN property_code INT NULL`,
+      );
+    }
+
+    const codeNullRows = await pool.execute<RowDataPacket[]>(
+      `SELECT id FROM listings WHERE property_code IS NULL ORDER BY id`,
+    );
+    if (codeNullRows[0].length > 0) {
+      const [maxCodeRows] = await pool.execute<RowDataPacket[]>(
+        `SELECT COALESCE(MAX(property_code), 1000) AS m FROM listings`,
+      );
+      let nextCode = Math.max(Number(maxCodeRows[0]?.m ?? 1000) + 1, 1001);
+      for (const r of codeNullRows[0] as { id: number }[]) {
+        await pool.execute(
+          `UPDATE listings SET property_code = ? WHERE id = ?`,
+          [nextCode++, r.id],
+        );
+      }
+    }
+    const [idxRows] = await pool.execute<RowDataPacket[]>(
+      `SELECT INDEX_NAME FROM INFORMATION_SCHEMA.STATISTICS
+       WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'listings'
+         AND INDEX_NAME = 'idx_listings_property_code'`,
+    );
+    if (idxRows[0].length === 0) {
+      await pool.execute(
+        `CREATE UNIQUE INDEX idx_listings_property_code ON listings(property_code)`,
+      );
+    }
+
+    await pool.execute(
+      `ALTER TABLE listings MODIFY COLUMN status ENUM('pending', 'active', 'stopped', 'taken', 'contacted') NOT NULL DEFAULT 'pending'`,
+    );
   }
 }
 
@@ -304,8 +340,9 @@ function runMigrationsSqlite() {
       image_path TEXT,
       image_paths TEXT,
       video_path TEXT,
-      status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending', 'active', 'stopped', 'taken')),
+      status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending', 'active', 'stopped', 'taken', 'contacted')),
       featured INTEGER NOT NULL DEFAULT 0,
+      property_code INTEGER UNIQUE,
       created_at TEXT NOT NULL DEFAULT (datetime('now'))
     );
 
@@ -423,6 +460,92 @@ function runMigrationsSqlite() {
   if (!names.has("video_path")) {
     db.exec(`ALTER TABLE listings ADD COLUMN video_path TEXT`);
   }
+
+  // --- property_code (unique, starting from 1001) ---
+  // Add column + backfill BEFORE any table rebuild so the rebuild can carry
+  // the codes over. Create the unique index AFTER the rebuild.
+  if (!names.has("property_code")) {
+    db.exec(`ALTER TABLE listings ADD COLUMN property_code INTEGER`);
+  }
+  const codeNull = db
+    .prepare("SELECT id FROM listings WHERE property_code IS NULL ORDER BY id")
+    .all() as { id: number }[];
+  if (codeNull.length > 0) {
+    const maxCode = db
+      .prepare("SELECT COALESCE(MAX(property_code), 1000) AS m FROM listings")
+      .get() as { m: number };
+    let nextCode = Math.max(Number(maxCode.m) + 1, 1001);
+    const updateCode = db.prepare(
+      "UPDATE listings SET property_code = ? WHERE id = ?",
+    );
+    const backfill = db.transaction((rows: { id: number }[]) => {
+      for (const row of rows) updateCode.run(nextCode++, row.id);
+    });
+    backfill(codeNull);
+  }
+
+  // --- allow 'contacted' listing status on existing tables ---
+  const listingsSql = (
+    db
+      .prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name='listings'")
+      .get() as { sql: string } | undefined
+  )?.sql ?? "";
+  if (!listingsSql.includes("'contacted'")) {
+    db.pragma("foreign_keys = OFF");
+    db.pragma("legacy_alter_table = ON");
+    db.exec("BEGIN");
+    try {
+      db.exec("ALTER TABLE listings RENAME TO listings_legacy");
+      db.exec(`
+        CREATE TABLE listings (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          district TEXT NOT NULL,
+          place TEXT NOT NULL,
+          landmark TEXT NOT NULL,
+          property_type TEXT NOT NULL DEFAULT 'flat',
+          property_details TEXT NOT NULL DEFAULT '',
+          price INTEGER NOT NULL DEFAULT 0,
+          parking_two_wheeler INTEGER NOT NULL DEFAULT 0,
+          parking_four_wheeler INTEGER NOT NULL DEFAULT 0,
+          other_facilities TEXT,
+          name TEXT NOT NULL,
+          phone TEXT NOT NULL,
+          role TEXT NOT NULL CHECK(role IN ('agent', 'homeowner')),
+          image_path TEXT,
+          image_paths TEXT,
+          video_path TEXT,
+          status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending', 'active', 'stopped', 'taken', 'contacted')),
+          featured INTEGER NOT NULL DEFAULT 0,
+          property_code INTEGER UNIQUE,
+          created_at TEXT NOT NULL DEFAULT (datetime('now'))
+        )
+      `);
+      db.exec(`
+        INSERT INTO listings (
+          id, district, place, landmark, property_type, property_details, price,
+          parking_two_wheeler, parking_four_wheeler, other_facilities, name, phone, role,
+          image_path, image_paths, video_path, status, featured, property_code, created_at
+        )
+        SELECT
+          id, district, place, landmark, property_type, property_details, price,
+          parking_two_wheeler, parking_four_wheeler, other_facilities, name, phone, role,
+          image_path, image_paths, video_path, status, featured, property_code, created_at
+        FROM listings_legacy
+      `);
+      db.exec("DROP TABLE listings_legacy");
+      db.exec("COMMIT");
+    } catch (err) {
+      db.exec("ROLLBACK");
+      throw err;
+    } finally {
+      db.pragma("foreign_keys = ON");
+      db.pragma("legacy_alter_table = OFF");
+    }
+  }
+
+  db.exec(
+    `CREATE UNIQUE INDEX IF NOT EXISTS idx_listings_property_code ON listings(property_code)`,
+  );
 
   const userColumns = db
     .prepare("PRAGMA table_info(users)")

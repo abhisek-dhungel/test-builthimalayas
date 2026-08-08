@@ -13,7 +13,14 @@ import { SiteHeader } from "./SiteHeader";
 import "@/app/admin-dashboard.css";
 import "@/app/auth-form.css";
 
-type Tab = "listings" | "orders" | "custom-orders" | "inquiries" | "news" | "users";
+type Tab =
+  | "listings"
+  | "orders"
+  | "custom-orders"
+  | "inquiries"
+  | "news"
+  | "users"
+  | "favorites";
 
 const TAB_LABELS: Record<Tab, string> = {
   listings: "All Listings",
@@ -22,6 +29,23 @@ const TAB_LABELS: Record<Tab, string> = {
   inquiries: "Inquiries",
   news: "News",
   users: "Users",
+  favorites: "Kept in Favourite",
+};
+
+type AdminFavouriteListing = {
+  id: number;
+  place: string;
+  landmark: string;
+  property_type: string;
+  property_details: string;
+  price: number;
+  status: string;
+  image_path: string | null;
+};
+
+type AdminUserFavourites = {
+  user: AppUser;
+  listings: AdminFavouriteListing[];
 };
 
 export function AdminDashboard() {
@@ -33,6 +57,7 @@ export function AdminDashboard() {
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [news, setNews] = useState<NewsItem[]>([]);
   const [users, setUsers] = useState<AppUser[]>([]);
+  const [favourites, setFavourites] = useState<AdminUserFavourites[]>([]);
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [userListings, setUserListings] = useState<Listing[]>([]);
   const [userListingsLoading, setUserListingsLoading] = useState(false);
@@ -45,7 +70,7 @@ export function AdminDashboard() {
     setLoading(true);
     setActionError("");
 
-    const [listingsRes, ordersRes, customOrdersRes, inquiriesRes, newsRes, usersRes] =
+    const [listingsRes, ordersRes, customOrdersRes, inquiriesRes, newsRes, usersRes, favouritesRes] =
       await Promise.all([
         fetch("/api/admin/listings", { credentials: "same-origin" }),
         fetch("/api/admin/orders?status=new", { credentials: "same-origin" }),
@@ -55,6 +80,7 @@ export function AdminDashboard() {
         fetch("/api/admin/inquiries?status=new", { credentials: "same-origin" }),
         fetch("/api/admin/news", { credentials: "same-origin" }),
         fetch("/api/admin/users", { credentials: "same-origin" }),
+        fetch("/api/admin/favorites", { credentials: "same-origin" }),
       ]);
 
     if (listingsRes.status === 401) {
@@ -68,6 +94,7 @@ export function AdminDashboard() {
     setInquiries(inquiriesRes.ok ? await inquiriesRes.json() : []);
     setNews(newsRes.ok ? await newsRes.json() : []);
     setUsers(usersRes.ok ? await usersRes.json() : []);
+    setFavourites(favouritesRes.ok ? await favouritesRes.json() : []);
     setLoading(false);
   }, [router]);
 
@@ -274,6 +301,13 @@ export function AdminDashboard() {
           >
             {TAB_LABELS.users}
           </SidebarLink>
+          <SidebarLink
+            active={tab === "favorites"}
+            onClick={() => setTab("favorites")}
+            count={favourites.length}
+          >
+            {TAB_LABELS.favorites}
+          </SidebarLink>
         </nav>
 
         <div className="admin-sidebar-footer">
@@ -308,7 +342,7 @@ export function AdminDashboard() {
         ) : tab === "listings" ? (
           <>
             <div className="mb-3 flex flex-wrap gap-2">
-              {["all", "pending", "active", "stopped", "taken"].map((status) => (
+              {["all", "pending", "active", "stopped", "contacted", "taken"].map((status) => (
                 <button
                   key={status}
                   type="button"
@@ -405,6 +439,18 @@ export function AdminDashboard() {
             onChanged={loadData}
             onError={setActionError}
           />
+        ) : tab === "favorites" ? (
+          <div className="space-y-3">
+            {favourites.length === 0 ? (
+              <p className="text-sm text-[var(--muted)]">
+                No customers have kept listings in their favourites yet.
+              </p>
+            ) : (
+              favourites.map((group) => (
+                <FavouriteGroupRow key={group.user.id} group={group} />
+              ))
+            )}
+          </div>
         ) : (
           <div className="space-y-3">
             {users.map((user) => (
@@ -415,6 +461,12 @@ export function AdminDashboard() {
                 listings={selectedUserId === user.id ? userListings : []}
                 listingsLoading={
                   selectedUserId === user.id && userListingsLoading
+                }
+                favourites={
+                  selectedUserId === user.id
+                    ? favourites.find((f) => f.user.id === user.id)?.listings ??
+                      []
+                    : []
                 }
                 onSelect={() => selectUser(user.id)}
                 onBlock={() => handleUserBlock(user.id, true)}
@@ -440,6 +492,7 @@ function UserRow({
   selected,
   listings,
   listingsLoading,
+  favourites,
   onSelect,
   onBlock,
   onUnblock,
@@ -450,6 +503,7 @@ function UserRow({
   selected: boolean;
   listings: Listing[];
   listingsLoading: boolean;
+  favourites: AdminFavouriteListing[];
   onSelect: () => void;
   onBlock: () => void;
   onUnblock: () => void;
@@ -549,8 +603,83 @@ function UserRow({
               No listings found for this phone number.
             </p>
           )}
+
+          <h3 className="mb-2 mt-4 text-sm font-semibold text-[var(--text)]">
+            Favourite Listings
+          </h3>
+          <FavouriteListingsList listings={favourites} />
         </div>
       )}
+    </div>
+  );
+}
+
+function FavouriteGroupRow({ group }: { group: AdminUserFavourites }) {
+  const isBlocked = Boolean(group.user.blocked);
+  return (
+    <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
+      <div className="flex flex-wrap items-center gap-2">
+        <p className="text-sm font-semibold text-[var(--text)]">
+          {group.user.name}
+        </p>
+        {isBlocked && (
+          <span className="rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-red-700">
+            Blocked
+          </span>
+        )}
+        <span className="rounded-full bg-[var(--surface-muted)] px-2 py-0.5 text-[10px] font-medium">
+          {group.listings.length}{" "}
+          {group.listings.length === 1 ? "favourite" : "favourites"}
+        </span>
+      </div>
+      <p className="mt-1 text-sm text-[var(--text)]">{group.user.phone}</p>
+      {group.user.address && (
+        <p className="mt-1 text-xs text-[var(--muted)]">
+          Address: {group.user.address}
+        </p>
+      )}
+      <div className="mt-3">
+        <FavouriteListingsList listings={group.listings} />
+      </div>
+    </div>
+  );
+}
+
+function FavouriteListingsList({
+  listings,
+}: {
+  listings: AdminFavouriteListing[];
+}) {
+  if (listings.length === 0) {
+    return (
+      <p className="text-sm text-[var(--muted)]">No favourites yet.</p>
+    );
+  }
+  return (
+    <div className="space-y-3">
+      {listings.map((listing) => (
+        <div
+          key={listing.id}
+          className="rounded-xl border border-[var(--border)] bg-[var(--bg)] p-3"
+        >
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-sm font-semibold text-[var(--text)]">
+              {listing.property_details || "Property"}
+            </span>
+            <span className="rounded-full bg-[var(--surface-muted)] px-2 py-0.5 text-[10px] font-medium">
+              {getPropertyTypeLabel(listing.property_type)}
+            </span>
+            <StatusBadge status={listing.status} />
+          </div>
+          <p className="mt-1 text-xs text-[var(--muted)]">
+            Listing #{listing.id} · {listing.place}
+            {listing.landmark ? ` · Near ${listing.landmark}` : ""}
+          </p>
+          <p className="mt-1 text-sm font-semibold text-[var(--primary)]">
+            {formatPrice(listing.price)}
+          </p>
+        </div>
+      ))}
     </div>
   );
 }
@@ -616,6 +745,11 @@ function ListingRow({
           <p className="mt-2 text-sm font-semibold text-[var(--primary)]">
             {formatPrice(listing.price)}
           </p>
+          {listing.property_code != null && (
+            <p className="mt-1 text-xs text-[var(--text)]">
+              Code #{listing.property_code}
+            </p>
+          )}
           <p className="mt-1 text-sm text-[var(--text)]">
             {listing.name} · {listing.phone}
           </p>
@@ -661,6 +795,12 @@ function ListingRow({
           <ActionBtn
             label="Mark taken"
             onClick={() => onAction(listing.id, "taken")}
+          />
+        )}
+        {(listing.status === "active" || listing.status === "stopped") && (
+          <ActionBtn
+            label="Mark Contacted"
+            onClick={() => onAction(listing.id, "contacted")}
           />
         )}
         {listing.status === "active" &&

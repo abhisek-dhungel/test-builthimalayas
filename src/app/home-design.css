@@ -85,20 +85,28 @@
 }
 
 .home-design .btn-login {
-  padding: 11px 28px;
+  box-sizing: border-box;
+  height: 36px;
+  padding: 0 18px;
   border-radius: 999px;
   border: 1.5px solid var(--hd-navy);
   color: var(--hd-navy);
   font-weight: 600;
-  font-size: 14.5px;
+  font-size: 12px;
+  line-height: 1;
   background: transparent;
   transition: all 0.18s ease;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 130px;
+  white-space: nowrap;
 }
 
 .home-design .btn-login:hover {
-  background: var(--hd-navy);
+  background: #2563eb;
+  border-color: #2563eb;
   color: #fff;
 }
 
@@ -168,10 +176,10 @@
   );
   color: #1a1208;
   font-weight: 800;
-  font-size: 13.5px;
+  font-size: 12px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  padding: 12px 22px;
+  padding: 10px 18px;
   border-radius: 999px;
   border: 1px solid rgba(255, 235, 190, 0.55);
   box-shadow: none;
@@ -209,7 +217,10 @@
 
 .home-design .btn-list-property:hover {
   transform: translateY(-2px) scale(1.03);
-  filter: brightness(1.06);
+  background: #2563eb;
+  color: #fff;
+  border-color: transparent;
+  filter: none;
   box-shadow: none;
   animation: none;
 }
@@ -217,6 +228,42 @@
 .home-design .btn-list-property:active {
   transform: translateY(1px) scale(0.99);
   box-shadow: none;
+}
+
+/* Smaller header variant of the List Your Property button.
+   Matches the Log In button style: navy outline, transparent fill,
+   blue on hover. */
+.home-design .btn-list-property--sm {
+  justify-self: auto;
+  box-sizing: border-box;
+  height: 36px;
+  padding: 0 18px;
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  animation: none;
+  background: transparent;
+  border: 1.5px solid var(--hd-navy);
+  color: var(--hd-navy);
+  font-weight: 600;
+  overflow: visible;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  gap: 6px;
+  min-width: 130px;
+}
+
+.home-design .btn-list-property--sm::before {
+  display: none;
+}
+
+.home-design .btn-list-property--sm:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+  transform: translateY(-1px);
 }
 
 @keyframes listPropertyPulse {
@@ -1192,21 +1239,11 @@
 }
 
 .home-design .footer-col {
-  border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.035);
-  backdrop-filter: blur(10px);
   padding: 22px 20px 24px;
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease,
-    background 0.2s ease;
 }
 
 .home-design .footer-col:hover {
-  transform: translateY(-2px);
-  border-color: rgba(205, 163, 106, 0.28);
-  background: rgba(255, 255, 255, 0.055);
+  transform: none;
 }
 
 .home-design .footer-col h4 {
@@ -1216,21 +1253,32 @@
   letter-spacing: 1.6px;
   text-transform: uppercase;
   color: var(--hd-bronze-light);
-  margin-bottom: 18px;
+  margin-bottom: 12px;
+}
+
+.home-design .footer-company {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #fff;
+  margin-bottom: 12px;
 }
 
 .home-design .footer-logo {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
-  margin-bottom: 16px;
-  margin-top: -4px;
+  margin-top: 51px;
+  margin-bottom: 0;
+  padding-left: 34px;
+  transform: scale(0.88);
+  transform-origin: left center;
   transition: opacity 0.15s ease, transform 0.15s ease;
 }
 
 .home-design .footer-logo:hover {
   opacity: 0.9;
-  transform: translateY(-1px);
+  transform: scale(0.88) translateY(-1px);
 }
 
 .home-design .footer-brand {
@@ -1264,18 +1312,11 @@
   font-size: 14px;
   margin-bottom: 10px;
   color: #d8d5cf;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(0, 0, 0, 0.18);
-  padding: 10px 12px;
-  transition:
-    border-color 0.15s ease,
-    background 0.15s ease;
+  padding: 0;
 }
 
 .home-design .footer-contact-row:hover {
-  border-color: rgba(205, 163, 106, 0.35);
-  background: rgba(205, 163, 106, 0.08);
+  color: #fff;
 }
 
 .home-design .footer-contact-row a {
@@ -1548,6 +1589,38 @@
   grid-column: auto;
 }
 
+.home-design .footer-support-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 18px;
+  border-radius: 9999px;
+  background: #25D366;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.15px;
+  line-height: 1;
+  text-decoration: none;
+  transition:
+    background 0.18s ease,
+    transform 0.18s ease;
+}
+
+.home-design .footer-support-btn:hover {
+  background: #1EB857;
+  transform: translateY(-2px);
+}
+
+.home-design .footer-support-icon {
+  display: inline-flex;
+}
+
+.home-design .footer-support-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
 @media (max-width: 1080px) {
   .home-design .listing-card-slide {
     flex-basis: calc((100% - 26px) / 2);
@@ -1589,6 +1662,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  .home-design .footer-logo {
+    justify-content: center;
+    padding-left: 0;
+    transform-origin: center;
   }
 
   .home-design .footer-col:hover {
@@ -1697,11 +1776,27 @@
     align-self: center;
     margin-top: 0;
     flex-shrink: 0;
+    gap: 8px;
   }
 
   .home-design .btn-login {
-    padding: 8px 16px;
-    font-size: 13px;
+    height: 30px;
+    padding: 0 12px;
+    font-size: 10.5px;
+    min-width: 96px;
+    gap: 5px;
+  }
+
+  .home-design .btn-login svg {
+    width: 13px;
+    height: 13px;
+  }
+
+  .home-design .btn-list-property--sm {
+    height: 30px;
+    padding: 0 12px;
+    font-size: 10.5px;
+    min-width: 96px;
   }
 
   .home-design .rent-row {
@@ -1717,8 +1812,8 @@
 
   .home-design .btn-list-property {
     justify-self: center;
-    font-size: 12.5px;
-    padding: 11px 20px;
+    font-size: 11px;
+    padding: 9px 15px;
   }
 
   .home-design .rent-heading {
@@ -1940,6 +2035,28 @@
 }
 
 @media (max-width: 560px) {
+  .home-design .top-row {
+    gap: 8px;
+    padding: 12px 12px;
+  }
+
+  .home-design .header-actions {
+    gap: 6px;
+  }
+
+  .home-design .btn-login,
+  .home-design .btn-list-property--sm {
+    height: 28px;
+    padding: 0 10px;
+    font-size: 10px;
+    min-width: 86px;
+  }
+
+  .home-design .btn-login svg {
+    width: 12px;
+    height: 12px;
+  }
+
   .home-design .listings-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;

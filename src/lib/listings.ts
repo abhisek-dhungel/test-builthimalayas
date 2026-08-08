@@ -46,7 +46,8 @@ export function toPublicListing(
   listing: Listing | Record<string, unknown>,
 ): PublicListing {
   const normalized = normalizeListing(listing as Record<string, unknown>);
-  const { role, name, phone, ...publicListing } = normalized;
+  const { role, name, phone, property_code, ...publicListing } = normalized;
+  void property_code;
   return publicListing;
 }
 
@@ -61,6 +62,7 @@ export function toPublicListingCard(
     image_paths,
     other_facilities,
     video_path,
+    property_code,
     ...publicListing
   } = normalized;
   return {

@@ -50,9 +50,7 @@ export function SiteFooter() {
           <div className="footer-grid">
             <div className="footer-col">
               <h4>Contact Us</h4>
-              <Link href="/" className="footer-logo">
-                <BuiltLogo size="sm" showTagline />
-              </Link>
+              <p className="footer-company">Built Himalays Pvt Ltd</p>
               <div className="footer-contact-row">
                 <svg
                   viewBox="0 0 24 24"
@@ -86,8 +84,8 @@ export function SiteFooter() {
                   builthimalayas@gmail.com
                 </a>
               </div>
-              <Link href="/news" className="footer-news-link">
-                News
+              <Link href="/" className="footer-logo">
+                <BuiltLogo size="lg" />
               </Link>
             </div>
 
@@ -145,17 +143,6 @@ export function SiteFooter() {
 
             <div className="footer-col">
               <h4>Social Media</h4>
-              <a
-                className="footer-whatsapp"
-                href="https://wa.me/9779802373431"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <svg viewBox="0 0 24 24" fill="#08240f" aria-hidden>
-                  <path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.9 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01a7.94 7.94 0 0 0 5.54-13.58zM12.05 18.53h-.01a6.6 6.6 0 0 1-3.36-.92l-.24-.14-2.5.66.67-2.44-.16-.25a6.58 6.58 0 0 1 10.2-8.18 6.53 6.53 0 0 1 1.94 4.66 6.6 6.6 0 0 1-6.54 6.61zm3.6-4.93c-.2-.1-1.17-.58-1.35-.64-.18-.07-.32-.1-.45.1-.13.2-.51.64-.63.77-.12.13-.23.15-.43.05a5.4 5.4 0 0 1-1.59-.98 6 6 0 0 1-1.1-1.37c-.12-.2 0-.31.09-.4.09-.1.2-.24.3-.36.1-.12.13-.2.2-.34.06-.13.03-.25-.02-.35-.05-.1-.45-1.08-.61-1.48-.16-.39-.33-.33-.45-.34h-.38c-.13 0-.35.05-.53.25s-.7.68-.7 1.66.72 1.93.82 2.06c.1.13 1.42 2.17 3.44 3.04.48.21.86.33 1.15.42.48.15.92.13 1.27.08.39-.06 1.17-.48 1.34-.94.16-.46.16-.86.11-.94-.05-.09-.18-.14-.38-.24z" />
-                </svg>
-                Chat on WhatsApp
-              </a>
               <div className="footer-social-icons">
                 <a
                   href="#"
@@ -213,6 +200,30 @@ export function SiteFooter() {
 
           <div className="footer-bottom">
             <span>Copyright — Built Himalayas 2026 (All Rights Reserved)</span>
+            <a
+              className="footer-support-btn"
+              href="https://wa.me/9779802373431"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Chat on WhatsApp"
+              title="Customer Support on WhatsApp"
+            >
+              <span className="footer-support-icon" aria-hidden>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
+                  <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z" />
+                  <path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
+                </svg>
+              </span>
+              <span className="footer-support-text hidden sm:inline">Customer Support</span>
+            </a>
           </div>
         </div>
       </footer>

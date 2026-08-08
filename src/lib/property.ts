@@ -7,16 +7,19 @@ export const PROPERTY_TYPES: { value: PropertyType; label: string }[] = [
 ];
 
 export const ROOM_LAYOUTS = [
-  "1 Room",
+  "Room",
   "2 Room",
   "3 Room",
+  "4 Room",
 ] as const;
 
 export const FLAT_LAYOUTS = [
+  "1BK",
+  "2BK",
+  "3BK",
+  "1BHK",
   "2BHK",
   "3BHK",
-  "2BK",
-  "1BK",
 ] as const;
 
 export type RoomLayout = (typeof ROOM_LAYOUTS)[number];

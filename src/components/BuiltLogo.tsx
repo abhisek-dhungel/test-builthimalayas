@@ -15,7 +15,6 @@ const sizes = {
 
 export function BuiltLogo({
   size = "md",
-  showTagline = true,
   className = "",
 }: BuiltLogoProps) {
   const s = sizes[size];
@@ -64,14 +63,6 @@ export function BuiltLogo({
       >
         BUILT
       </span>
-
-      {showTagline && (
-        <p
-          className={`${s.tagline} mt-1 font-medium uppercase tracking-[0.28em] text-[var(--accent)]`}
-        >
-          Himalayas
-        </p>
-      )}
     </div>
   );
 }

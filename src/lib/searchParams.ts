@@ -28,7 +28,7 @@ export function priceBandFromTarget(price: number): {
   priceMax: number;
 } {
   return {
-    priceMin: Math.max(0, Math.round(price * 0.9)),
-    priceMax: Math.round(price * 1.1),
+    priceMin: Math.max(0, Math.round(price * 0.8)),
+    priceMax: Math.round(price * 1.2),
   };
 }

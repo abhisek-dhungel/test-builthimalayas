@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { dbAll, dbRun } from "@/lib/database";
+import { dbAll, dbGet, dbRun } from "@/lib/database";
 import { toPublicListing, toPublicListingCard } from "@/lib/listings";
 import {
   getDisplayImagePath,
@@ -154,32 +154,58 @@ export async function POST(request: NextRequest) {
       storedVideoPath = video_path;
     }
 
-    const result = await dbRun(
-      `INSERT INTO listings (
-        district, place, landmark, property_type, property_details, price,
-        parking_two_wheeler, parking_four_wheeler, other_facilities,
-        name, phone, role, image_path, image_paths, video_path, status
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active')`,
-      [
-        district,
-        place,
-        landmark.trim(),
-        property_type,
-        property_details.trim(),
-        Math.round(parsedPrice),
-        twoWheeler,
-        fourWheeler,
-        String(other_facilities ?? "").trim() || null,
-        name.trim(),
-        phone.trim(),
-        role,
-        storedDisplayPath,
-        serializeImagePaths(storedImagePaths),
-        storedVideoPath,
-      ],
-    );
+    async function nextPropertyCode() {
+      const row = await dbGet<{ m: number }>(
+        "SELECT COALESCE(MAX(property_code), 1000) + 1 AS m FROM listings",
+      );
+      return Math.max(Number(row?.m ?? 1001), 1001);
+    }
 
-    return NextResponse.json({ id: result.lastInsertRowid, success: true });
+    const insertSql = `INSERT INTO listings (
+      district, place, landmark, property_type, property_details, price,
+      parking_two_wheeler, parking_four_wheeler, other_facilities,
+      name, phone, role, image_path, image_paths, video_path, status, property_code
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active', ?)`;
+    const insertArgs = [
+      district,
+      place,
+      landmark.trim(),
+      property_type,
+      property_details.trim(),
+      Math.round(parsedPrice),
+      twoWheeler,
+      fourWheeler,
+      String(other_facilities ?? "").trim() || null,
+      name.trim(),
+      phone.trim(),
+      role,
+      storedDisplayPath,
+      serializeImagePaths(storedImagePaths),
+      storedVideoPath,
+    ];
+
+    // Generate a unique property_code. If a concurrent create grabs the same
+    // code first (UNIQUE constraint), recompute the next one and retry.
+    let lastInsertError: unknown;
+    for (let attempt = 0; attempt < 8; attempt++) {
+      const propertyCode = await nextPropertyCode();
+      try {
+        const result = await dbRun(insertSql, [...insertArgs, propertyCode]);
+        return NextResponse.json({
+          id: result.lastInsertRowid,
+          success: true,
+          property_code: propertyCode,
+        });
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        if (/UNIQUE|Duplicate entry/i.test(message)) {
+          lastInsertError = err;
+          continue;
+        }
+        throw err;
+      }
+    }
+    throw lastInsertError;
   } catch (error) {
     console.error("Create listing failed:", error);
     const message =

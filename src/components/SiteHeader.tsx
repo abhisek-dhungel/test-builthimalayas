@@ -103,8 +103,21 @@ export function SiteHeader({ showBack = false }: { showBack?: boolean }) {
           ) : (
             <Link
               href={`/login?next=${encodeURIComponent(pathname || "/")}`}
-              className="rounded-full bg-[var(--primary)] px-3 py-1.5 text-xs font-semibold text-white"
+              className="inline-flex items-center gap-1.5 rounded-full bg-[var(--primary)] px-3 py-1.5 text-xs font-semibold text-white"
             >
+              <svg
+                viewBox="0 0 24 24"
+                className="h-3.5 w-3.5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
+              >
+                <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                <path d="M12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
               Login
             </Link>
           )}

@@ -2,7 +2,12 @@ import type { District } from "./locations";
 import type { PropertyType } from "./property";
 
 export type ListingRole = "agent" | "homeowner";
-export type ListingStatus = "pending" | "active" | "stopped" | "taken";
+export type ListingStatus =
+  | "pending"
+  | "active"
+  | "stopped"
+  | "taken"
+  | "contacted";
 
 export interface Listing {
   id: number;
@@ -23,10 +28,11 @@ export interface Listing {
   video_path: string | null;
   status: ListingStatus;
   featured: number;
+  property_code: number | null;
   created_at: string;
 }
 
-export type PublicListing = Omit<Listing, "role" | "name" | "phone">;
+export type PublicListing = Omit<Listing, "role" | "name" | "phone" | "property_code">;
 
 export interface VisitOrder {
   id: number;
