@@ -50,7 +50,7 @@ export function SiteFooter() {
           <div className="footer-grid">
             <div className="footer-col">
               <h4>Contact Us</h4>
-              <p className="footer-company">Built Himalays Pvt Ltd</p>
+              <p className="footer-company">Built Himalayas Pvt Ltd</p>
               <div className="footer-contact-row">
                 <svg
                   viewBox="0 0 24 24"
