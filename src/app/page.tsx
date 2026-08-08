@@ -3,7 +3,10 @@ import { dbAll } from "@/lib/database";
 import { getListingsForSection } from "@/lib/listings";
 import type { NewsItem, PublicListing } from "@/lib/types";
 
-export const revalidate = 60;
+// Render on request (not at build time) so DB queries run against the
+// production database, matching /browse. ISR/prerender would execute these
+// queries against an empty/ephemeral DB during `next build` and fail deploy.
+export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   let featuredListings: PublicListing[] = [];

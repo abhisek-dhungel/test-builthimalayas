@@ -4,7 +4,9 @@ import { SearchBrowse } from "@/components/SearchBrowse";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getActiveListings } from "@/lib/listings";
 
-export const revalidate = 60;
+// Render on request so DB queries run against the production database
+// (matching /browse). Prerendering at build time would fail the deploy.
+export const dynamic = "force-dynamic";
 
 export default async function SearchPage() {
   const listings = await getActiveListings();
