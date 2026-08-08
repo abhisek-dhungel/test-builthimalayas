@@ -195,35 +195,35 @@ export function SiteFooter() {
                   </svg>
                 </a>
               </div>
+              <a
+                className="footer-support-btn"
+                href="https://wa.me/9779802373431"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Chat on WhatsApp"
+                title="Customer Support on WhatsApp"
+              >
+                <span className="footer-support-icon" aria-hidden>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
+                    <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z" />
+                    <path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0-2-2v-3a2 2 0 0 0-2-2H3z" />
+                  </svg>
+                </span>
+                <span className="footer-support-text">Customer Support</span>
+              </a>
             </div>
           </div>
 
           <div className="footer-bottom">
             <span>Copyright — Built Himalayas 2026 (All Rights Reserved)</span>
-            <a
-              className="footer-support-btn"
-              href="https://wa.me/9779802373431"
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Chat on WhatsApp"
-              title="Customer Support on WhatsApp"
-            >
-              <span className="footer-support-icon" aria-hidden>
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
-                  <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z" />
-                  <path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
-                </svg>
-              </span>
-              <span className="footer-support-text hidden sm:inline">Customer Support</span>
-            </a>
           </div>
         </div>
       </footer>
