@@ -9,7 +9,12 @@ type Props = { params: Promise<{ id: string }> };
 
 export default async function ListingDetailPage({ params }: Props) {
   const { id } = await params;
-  const listing = await getActiveListingById(Number(id));
+  let listing: Awaited<ReturnType<typeof getActiveListingById>> | null = null;
+  try {
+    listing = await getActiveListingById(Number(id));
+  } catch (error) {
+    console.error("Listing detail data load failed:", error);
+  }
 
   if (!listing) notFound();
 

@@ -9,7 +9,14 @@ import { getActiveListings } from "@/lib/listings";
 export const dynamic = "force-dynamic";
 
 export default async function SearchPage() {
-  const listings = await getActiveListings();
+  // Match the homepage: if the DB is unreachable (e.g. MySQL not configured
+  // on the host), render the page with an empty result set instead of 500ing.
+  let listings: Awaited<ReturnType<typeof getActiveListings>> = [];
+  try {
+    listings = await getActiveListings();
+  } catch (error) {
+    console.error("Search data load failed:", error);
+  }
 
   return (
     <>

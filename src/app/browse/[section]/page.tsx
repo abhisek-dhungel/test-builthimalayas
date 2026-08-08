@@ -28,7 +28,12 @@ export default async function BrowseSectionPage({ params }: Props) {
   }
 
   const browseSection = section as BrowseSection;
-  const listings = await getListingsForSection(browseSection);
+  let listings: Awaited<ReturnType<typeof getListingsForSection>> = [];
+  try {
+    listings = await getListingsForSection(browseSection);
+  } catch (error) {
+    console.error("Browse section data load failed:", error);
+  }
   const title =
     browseSection === "featured"
       ? getSectionTitle(browseSection)

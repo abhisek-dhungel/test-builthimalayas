@@ -13,10 +13,21 @@ export const dynamic = "force-dynamic";
 const SECTIONS = ["featured", "kathmandu"] as const;
 
 export default async function BrowsePage() {
-  const listings = await getActiveListings();
+  // Render with an empty result set if the DB is unreachable, rather than
+  // crashing the page (matching the homepage + search resilience).
+  let listings: Awaited<ReturnType<typeof getActiveListings>> = [];
+  let featured: Awaited<ReturnType<typeof getListingsForSection>> = [];
+  let kathmandu: Awaited<ReturnType<typeof getListingsForSection>> = [];
 
-  const featured = await getListingsForSection("featured");
-  const kathmandu = await getListingsForSection("kathmandu");
+  try {
+    [listings, featured, kathmandu] = await Promise.all([
+      getActiveListings(),
+      getListingsForSection("featured"),
+      getListingsForSection("kathmandu"),
+    ]);
+  } catch (error) {
+    console.error("Browse data load failed:", error);
+  }
 
   const sectionData = {
     featured,
