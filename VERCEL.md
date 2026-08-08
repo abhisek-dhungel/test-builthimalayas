@@ -55,12 +55,19 @@ CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
 NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=your_cloud_name
 NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET=your_unsigned_preset_name
+
+# Password-reset emails (sender domain must be verified in Resend)
+RESEND_API_KEY=re_your_resend_api_key
+EMAIL_FROM=Built Himalayas <no-reply@your-domain.com>
+APP_URL=https://your-project.vercel.app
 ```
 
 `MYSQL_SSL=true` is usually required for Railway / Aiven / cloud MySQL.
 
 5. Deploy  
 6. Open the Vercel URL → test list property with photo/video  
+
+For password resets, verify the `EMAIL_FROM` domain in [Resend](https://resend.com) before deploying. After adding or changing the email variables, redeploy the project.
 
 ## If you see “This page couldn’t load”
 

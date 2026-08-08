@@ -1048,10 +1048,10 @@ function ActionBtn({
 function StatusBadge({ status }: { status: string }) {
   const colors: Record<string, string> = {
     pending: "bg-orange-100 text-orange-800",
-    active: "bg-[#e8eef3] text-[#153350]",
+    active: "bg-[#e8eef3] text-[#123b66]",
     stopped: "bg-yellow-100 text-yellow-800",
     taken: "bg-gray-100 text-gray-700",
-    new: "bg-[#e8eef3] text-[#0d2136]",
+    new: "bg-[#e8eef3] text-[#123b66]",
     contacted: "bg-blue-100 text-blue-700",
     closed: "bg-gray-100 text-gray-600",
     blocked: "bg-red-100 text-red-700",

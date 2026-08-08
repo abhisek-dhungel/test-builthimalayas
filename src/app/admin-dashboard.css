@@ -13,7 +13,7 @@
   width: 15.5rem;
   min-height: 100vh;
   padding: 1.25rem 0.85rem 1rem;
-  background: linear-gradient(180deg, #1f4a6e 0%, #153350 55%, #0d2136 100%);
+  background: #123b66;
   border-right: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 4px 0 24px rgba(13, 33, 54, 0.12);
 }
@@ -107,7 +107,7 @@
   gap: 0.5rem;
   border-radius: 0.75rem;
   border: 1px solid rgba(147, 197, 253, 0.45);
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  background: #123b66;
   padding: 0.7rem 0.75rem;
   font-size: 0.8125rem;
   font-weight: 700;
@@ -121,7 +121,7 @@
 }
 
 .admin-sidebar-news:hover {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: #123b66;
   box-shadow: 0 8px 20px rgba(37, 99, 235, 0.42);
 }
 

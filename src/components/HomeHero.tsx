@@ -8,25 +8,25 @@ const SLIDES = [
   {
     title: "Valley homes",
     subtitle: "Premium valley living",
-    gradient: "linear-gradient(135deg, #0d2136 0%, #153350 45%, #1f4a6e 100%)",
+    gradient: "linear-gradient(135deg, #123b66 0%, #123b66 45%, #123b66 100%)",
     emoji: "🏔️",
   },
   {
     title: "Modern flats",
     subtitle: "Premium city living",
-    gradient: "linear-gradient(135deg, #1c2530 0%, #153350 55%, #a9793f 100%)",
+    gradient: "linear-gradient(135deg, #1c2530 0%, #123b66 55%, #a9793f 100%)",
     emoji: "🏢",
   },
   {
     title: "Family rentals",
     subtitle: "Space, comfort & location",
-    gradient: "linear-gradient(135deg, #5c4a2e 0%, #153350 40%, #f0e2cd 120%)",
+    gradient: "linear-gradient(135deg, #5c4a2e 0%, #123b66 40%, #f0e2cd 120%)",
     emoji: "🏡",
   },
   {
     title: "Your next home",
     subtitle: "Across Kathmandu Valley",
-    gradient: "linear-gradient(135deg, #0d2136 0%, #153350 50%, #1c2530 100%)",
+    gradient: "linear-gradient(135deg, #123b66 0%, #123b66 50%, #1c2530 100%)",
     emoji: "🏠",
   },
 ];

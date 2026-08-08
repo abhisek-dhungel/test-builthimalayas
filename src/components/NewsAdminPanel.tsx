@@ -308,7 +308,7 @@ More text under that subheading…`}
                   <span
                     className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase ${
                       item.status === "active"
-                        ? "bg-[#e8eef3] text-[#153350]"
+                        ? "bg-[#e8eef3] text-[#123b66]"
                         : "bg-yellow-100 text-yellow-800"
                     }`}
                   >

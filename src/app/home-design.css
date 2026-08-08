@@ -1,6 +1,6 @@
 .home-design {
-  --hd-navy: #153350;
-  --hd-navy-deep: #0d2136;
+  --hd-navy: #123b66;
+  --hd-navy-deep: #123b66;
   --hd-bronze: #a9793f;
   --hd-bronze-light: #cda36a;
   --hd-bronze-pale: #f0e2cd;
@@ -91,7 +91,7 @@
   border-radius: 999px;
   border: 1.5px solid var(--hd-navy);
   color: var(--hd-navy);
-  font-weight: 600;
+  font-weight: 700;
   font-size: 12px;
   line-height: 1;
   background: transparent;
@@ -102,12 +102,21 @@
   gap: 6px;
   min-width: 130px;
   white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 3px 0 rgba(18, 59, 102, 0.22);
 }
 
 .home-design .btn-login:hover {
-  background: #2563eb;
-  border-color: #2563eb;
+  background: #123b66;
+  border-color: #123b66;
   color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(18, 59, 102, 0.24);
+}
+
+.home-design .btn-login:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 rgba(18, 59, 102, 0.22);
 }
 
 .home-design .header-actions {
@@ -182,7 +191,7 @@
   padding: 10px 18px;
   border-radius: 999px;
   border: 1px solid rgba(255, 235, 190, 0.55);
-  box-shadow: none;
+  box-shadow: 0 4px 0 rgba(89, 59, 23, 0.28), 0 8px 16px rgba(89, 59, 23, 0.16);
   transition:
     transform 0.18s ease,
     filter 0.18s ease;
@@ -190,6 +199,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  cursor: pointer;
   animation: listPropertyPulse 2.2s ease-in-out infinite;
 }
 
@@ -217,17 +227,17 @@
 
 .home-design .btn-list-property:hover {
   transform: translateY(-2px) scale(1.03);
-  background: #2563eb;
+  background: #123b66;
   color: #fff;
   border-color: transparent;
   filter: none;
-  box-shadow: none;
+  box-shadow: 0 5px 12px rgba(18, 59, 102, 0.26);
   animation: none;
 }
 
 .home-design .btn-list-property:active {
   transform: translateY(1px) scale(0.99);
-  box-shadow: none;
+  box-shadow: 0 1px 0 rgba(18, 59, 102, 0.22);
 }
 
 /* Smaller header variant of the List Your Property button.
@@ -253,6 +263,7 @@
   white-space: nowrap;
   gap: 6px;
   min-width: 130px;
+  box-shadow: 0 3px 0 rgba(18, 59, 102, 0.22);
 }
 
 .home-design .btn-list-property--sm::before {
@@ -260,10 +271,11 @@
 }
 
 .home-design .btn-list-property--sm:hover {
-  background: #2563eb;
-  border-color: #2563eb;
+  background: #123b66;
+  border-color: #123b66;
   color: #fff;
   transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(18, 59, 102, 0.24);
 }
 
 @keyframes listPropertyPulse {
@@ -1201,26 +1213,14 @@
 .home-design footer.site-footer {
   position: relative;
   overflow: hidden;
-  background:
-    radial-gradient(circle at 12% -10%, rgba(205, 163, 106, 0.22), transparent 42%),
-    radial-gradient(circle at 90% 20%, rgba(31, 74, 110, 0.45), transparent 38%),
-    linear-gradient(165deg, #0d2136 0%, #153350 48%, #0a1828 100%);
-  color: #d8d5cf;
-  padding: 56px 32px 0;
-  border-top: 1px solid rgba(205, 163, 106, 0.18);
+  background: #123b66;
+  color: #e1ebf5;
+  padding: 60px 32px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .home-design footer.site-footer::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(205, 163, 106, 0.65),
-    transparent
-  );
+  display: none;
 }
 
 .home-design .footer-inner {
@@ -1235,7 +1235,7 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 22px;
   padding-bottom: 36px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 .home-design .footer-col {
@@ -1252,8 +1252,8 @@
   font-weight: 700;
   letter-spacing: 1.6px;
   text-transform: uppercase;
-  color: var(--hd-bronze-light);
-  margin-bottom: 12px;
+  color: #f1d18a;
+  margin-bottom: 15px;
 }
 
 .home-design .footer-company {
@@ -1311,7 +1311,7 @@
   gap: 10px;
   font-size: 14px;
   margin-bottom: 10px;
-  color: #d8d5cf;
+  color: #e1ebf5;
   padding: 0;
 }
 
@@ -1326,7 +1326,7 @@
 }
 
 .home-design .footer-contact-row a:hover {
-  color: var(--hd-bronze-light);
+  color: #f1d18a;
 }
 
 .home-design .footer-news-link {
@@ -1348,7 +1348,7 @@
 .home-design .footer-contact-row svg {
   width: 17px;
   height: 17px;
-  stroke: var(--hd-bronze-light);
+  stroke: #f1d18a;
   flex-shrink: 0;
 }
 
@@ -1372,26 +1372,22 @@
   white-space: nowrap;
   font-size: 13.5px;
   font-weight: 600;
-  color: #e8e4dc;
+  color: #eef5fb;
   transition:
     color 0.15s ease,
     background 0.15s ease,
     border-color 0.15s ease,
     transform 0.15s ease;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
   padding: 8px 14px;
 }
 
 .home-design .footer-locality-list a:hover {
-  color: #241505;
-  background: linear-gradient(
-    180deg,
-    var(--hd-bronze-light),
-    var(--hd-bronze)
-  );
-  border-color: transparent;
+  color: #123b66;
+  background: #f1d18a;
+  border-color: #f1d18a;
   transform: translateX(2px);
 }
 
@@ -1405,7 +1401,7 @@
   font-size: 11px;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: #b0aaa0;
+  color: #c7d8e9;
   margin-bottom: 4px;
   display: block;
   font-weight: 600;
@@ -1414,8 +1410,8 @@
 .home-design .footer-form input,
 .home-design .footer-form textarea {
   width: 100%;
-  background: rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
   padding: 11px 13px;
   color: #fff;
@@ -1430,15 +1426,15 @@
 
 .home-design .footer-form input::placeholder,
 .home-design .footer-form textarea::placeholder {
-  color: #6f6c66;
+  color: #adc2d7;
 }
 
 .home-design .footer-form input:focus,
 .home-design .footer-form textarea:focus {
   outline: none;
-  border-color: var(--hd-bronze-light);
-  background: rgba(0, 0, 0, 0.35);
-  box-shadow: 0 0 0 3px rgba(205, 163, 106, 0.18);
+  border-color: #f1d18a;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 0 3px rgba(241, 209, 138, 0.16);
 }
 
 .home-design .footer-form-field {
@@ -1581,7 +1577,7 @@
   justify-content: space-between;
   gap: 10px 24px;
   font-size: 13px;
-  color: #9a958c;
+  color: #c7d8e9;
   letter-spacing: 0.3px;
 }
 

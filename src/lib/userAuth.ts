@@ -161,10 +161,17 @@ export async function requestPasswordReset(email: string, appUrl: string) {
     [user.id, tokenHash, expiresAt],
   );
 
-  await sendPasswordResetEmail(
-    cleanedEmail,
-    `${appUrl}/reset-password?token=${encodeURIComponent(token)}`,
-  );
+  try {
+    await sendPasswordResetEmail(
+      cleanedEmail,
+      `${appUrl.replace(/\/$/, "")}/reset-password?token=${encodeURIComponent(token)}`,
+    );
+  } catch (error) {
+    await dbRun("DELETE FROM password_reset_tokens WHERE token_hash = ?", [
+      tokenHash,
+    ]);
+    throw error;
+  }
 }
 
 export async function resetPassword(token: string, password: string) {

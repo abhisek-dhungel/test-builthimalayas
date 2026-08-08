@@ -2,9 +2,9 @@
 
 :root {
   /* BUILT Himalayas — design navy + bronze */
-  --primary: #153350;
-  --primary-light: #1f4a6e;
-  --primary-dark: #0d2136;
+  --primary: #123b66;
+  --primary-light: #123b66;
+  --primary-dark: #123b66;
   --secondary: #1c2530;
   --bg: #f8f4ec;
   --surface: #fffdf9;
@@ -18,11 +18,11 @@
   --success-bg: #e8eef3;
 
   /* Liquid glass — blue (shared) */
-  --lg-blue-deep: #153350;
-  --lg-blue-mid: #1f4a6e;
-  --lg-blue-accent: #2a5f85;
-  --lg-blue-muted: rgba(21, 51, 80, 0.75);
-  --lg-blue-label: rgba(13, 33, 54, 0.82);
+  --lg-blue-deep: #123b66;
+  --lg-blue-mid: #123b66;
+  --lg-blue-accent: #123b66;
+  --lg-blue-muted: rgba(18, 59, 102, 0.75);
+  --lg-blue-label: rgba(18, 59, 102, 0.82);
   --lg-glass-border: rgba(255, 255, 255, 0.48);
   --lg-glass-bg:
     linear-gradient(
@@ -52,7 +52,7 @@
     radial-gradient(circle at 20% 20%, rgba(31, 74, 110, 0.32), transparent 45%),
     radial-gradient(circle at 80% 80%, rgba(21, 51, 80, 0.28), transparent 50%),
     rgba(13, 33, 54, 0.52);
-  --lg-btn-gradient: linear-gradient(135deg, #2a5f85 0%, #1f4a6e 48%, #153350 100%);
+  --lg-btn-gradient: #123b66;
   --lg-btn-shadow: 0 10px 24px rgba(21, 51, 80, 0.35);
   --lg-btn-shadow-hover: 0 14px 28px rgba(21, 51, 80, 0.42);
   --lg-focus-border: rgba(31, 74, 110, 0.85);
@@ -109,7 +109,7 @@ body {
 }
 
 .parking-pill-two {
-  color: #153350;
+  color: #123b66;
   background: #e8eef3;
   border-color: rgba(21, 51, 80, 0.12);
 }
@@ -173,6 +173,11 @@ body {
 
 .built-logo-triangle {
   filter: drop-shadow(0 3px 4px rgba(93, 64, 55, 0.3));
+}
+
+img[src="/built-logo-cropped.png"] {
+  filter: sepia(0.2) saturate(1.05) brightness(1.12) contrast(1.04)
+    drop-shadow(0 2px 2px rgba(93, 64, 55, 0.3));
 }
 
 /* Full-screen flipping BUILT logo while navigating / loading */
@@ -245,9 +250,9 @@ body {
     var(--primary-dark) 100%
   );
   border: 1px solid var(--primary-dark);
-  border-bottom: 3px solid #0d2136;
+  border-bottom: 3px solid #123b66;
   box-shadow:
-    0 6px 0 #0d2136,
+    0 6px 0 #123b66,
     0 8px 16px rgba(21, 51, 80, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   transform: translateY(0);
@@ -261,7 +266,7 @@ body {
   filter: brightness(1.06);
   transform: translateY(-2px);
   box-shadow:
-    0 8px 0 #0d2136,
+    0 8px 0 #123b66,
     0 12px 22px rgba(21, 51, 80, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
@@ -271,7 +276,7 @@ body {
   filter: brightness(0.96);
   border-bottom-width: 1px;
   box-shadow:
-    0 2px 0 #0d2136,
+    0 2px 0 #123b66,
     0 4px 8px rgba(21, 51, 80, 0.25),
     inset 0 2px 4px rgba(0, 0, 0, 0.15);
 }
