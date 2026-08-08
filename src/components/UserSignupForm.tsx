@@ -13,6 +13,7 @@ export function UserSignupForm() {
   const next = searchParams.get("next") || "/";
   const [ready, setReady] = useState(false);
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -34,7 +35,7 @@ export function UserSignupForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "same-origin",
-        body: JSON.stringify({ name, address, phone, password }),
+        body: JSON.stringify({ name, email, address, phone, password }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Signup failed");
@@ -84,6 +85,19 @@ export function UserSignupForm() {
                   className="auth-input"
                   placeholder="Your address"
                   autoComplete="street-address"
+                />
+              </label>
+
+              <label className="auth-field">
+                <span className="auth-label">Email address</span>
+                <input
+                  required
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="auth-input"
+                  placeholder="you@example.com"
+                  autoComplete="email"
                 />
               </label>
 

@@ -7,13 +7,13 @@ import { BuiltLogo } from "./BuiltLogo";
 import { SiteHeader } from "./SiteHeader";
 import "@/app/auth-form.css";
 
-export function UserLoginForm() {
+export function ResetPasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const next = searchParams.get("next") || "/";
+  const token = searchParams.get("token") || "";
   const [ready, setReady] = useState(false);
-  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -22,24 +22,34 @@ export function UserLoginForm() {
     return () => window.cancelAnimationFrame(frame);
   }, []);
 
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
+  async function handleSubmit(event: FormEvent) {
+    event.preventDefault();
+    if (!token) {
+      setError("This password reset link is invalid or has expired.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
     setLoading(true);
     setError("");
-
     try {
-      const res = await fetch("/api/user/login", {
+      const response = await fetch("/api/user/password-reset/confirm", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "same-origin",
-        body: JSON.stringify({ phone, password }),
+        body: JSON.stringify({ token, password }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Login failed");
-      router.push(next);
-      router.refresh();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Login failed");
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Unable to reset password.");
+      router.push("/login");
+    } catch (resetError) {
+      setError(
+        resetError instanceof Error
+          ? resetError.message
+          : "Unable to reset password.",
+      );
     } finally {
       setLoading(false);
     }
@@ -54,61 +64,41 @@ export function UserLoginForm() {
             <div className="auth-brand">
               <BuiltLogo size="md" showTagline />
             </div>
-
-            <span className="auth-kicker">Welcome back</span>
-            <h1 className="auth-title">Sign in</h1>
-            <p className="auth-subtitle">
-              Use your phone number and password to continue.
-            </p>
-
+            <span className="auth-kicker">Account recovery</span>
+            <h1 className="auth-title">Set a new password</h1>
+            <p className="auth-subtitle">Choose a new password for your account.</p>
             <div className="auth-form">
               <label className="auth-field">
-                <span className="auth-label">Phone number</span>
-                <input
-                  required
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="auth-input"
-                  placeholder="98XXXXXXXX"
-                  autoComplete="tel"
-                />
-              </label>
-
-              <label className="auth-field">
-                <span className="auth-label">Password</span>
+                <span className="auth-label">New password</span>
                 <input
                   required
                   type="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(event) => setPassword(event.target.value)}
                   className="auth-input"
-                  placeholder="Your password"
-                  autoComplete="current-password"
+                  autoComplete="new-password"
                   minLength={3}
                 />
               </label>
-
-              <p className="auth-forgot-password">
-                <Link href="/forgot-password">Forgot password?</Link>
-              </p>
-
+              <label className="auth-field">
+                <span className="auth-label">Confirm new password</span>
+                <input
+                  required
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(event) => setConfirmPassword(event.target.value)}
+                  className="auth-input"
+                  autoComplete="new-password"
+                  minLength={3}
+                />
+              </label>
               {error && <p className="auth-error">{error}</p>}
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="auth-submit"
-              >
-                {loading ? "Signing in..." : "Login"}
+              <button type="submit" disabled={loading} className="auth-submit">
+                {loading ? "Updating password..." : "Update password"}
               </button>
             </div>
-
             <p className="auth-footer">
-              New here?{" "}
-              <Link href={`/signup?next=${encodeURIComponent(next)}`}>
-                Create an account
-              </Link>
+              <Link href="/login">Back to login</Link>
             </p>
           </form>
         </div>

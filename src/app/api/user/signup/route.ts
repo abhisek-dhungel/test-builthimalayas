@@ -5,7 +5,7 @@ import { isValidPhone } from "@/lib/validation";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, phone, address, password } = body;
+    const { name, email, phone, address, password } = body;
 
     if (!isValidPhone(String(phone ?? ""))) {
       return NextResponse.json(
@@ -16,6 +16,7 @@ export async function POST(request: NextRequest) {
 
     const result = await signupUser({
       name: String(name ?? ""),
+      email: String(email ?? ""),
       phone: String(phone ?? ""),
       address: address ? String(address) : undefined,
       password: String(password ?? ""),

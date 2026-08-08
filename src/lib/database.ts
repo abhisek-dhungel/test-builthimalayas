@@ -175,11 +175,23 @@ async function runMigrationsMysql() {
     CREATE TABLE IF NOT EXISTS users (
       id INT AUTO_INCREMENT PRIMARY KEY,
       name VARCHAR(255) NOT NULL,
+      email VARCHAR(255) NULL UNIQUE,
       phone VARCHAR(50) NOT NULL UNIQUE,
       address TEXT NULL,
       password_hash VARCHAR(255) NOT NULL,
       blocked TINYINT(1) NOT NULL DEFAULT 0,
       created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+  `);
+
+  await pool.execute(`
+    CREATE TABLE IF NOT EXISTS password_reset_tokens (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      user_id INT NOT NULL,
+      token_hash VARCHAR(64) NOT NULL UNIQUE,
+      expires_at DATETIME NOT NULL,
+      created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
   `);
 
@@ -232,6 +244,17 @@ async function runMigrationsMysql() {
       await pool.execute(
         `ALTER TABLE users ADD COLUMN blocked TINYINT(1) NOT NULL DEFAULT 0`,
       );
+    }
+    if (!userColumns.has("email")) {
+      await pool.execute(`ALTER TABLE users ADD COLUMN email VARCHAR(255) NULL`);
+    }
+    const [emailIndexRows] = await pool.execute<RowDataPacket[]>(
+      `SELECT INDEX_NAME FROM INFORMATION_SCHEMA.STATISTICS
+       WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users'
+         AND INDEX_NAME = 'idx_users_email'`,
+    );
+    if (emailIndexRows.length === 0) {
+      await pool.execute(`CREATE UNIQUE INDEX idx_users_email ON users(email)`);
     }
   }
 
@@ -380,10 +403,20 @@ function runMigrationsSqlite() {
     CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
+      email TEXT UNIQUE,
       phone TEXT UNIQUE NOT NULL,
       address TEXT,
       password_hash TEXT NOT NULL,
       created_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS password_reset_tokens (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL,
+      token_hash TEXT NOT NULL UNIQUE,
+      expires_at TEXT NOT NULL,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     );
 
     CREATE TABLE IF NOT EXISTS favorites (
@@ -554,6 +587,10 @@ function runMigrationsSqlite() {
   if (!userNames.has("blocked")) {
     db.exec(`ALTER TABLE users ADD COLUMN blocked INTEGER NOT NULL DEFAULT 0`);
   }
+  if (!userNames.has("email")) {
+    db.exec(`ALTER TABLE users ADD COLUMN email TEXT`);
+  }
+  db.exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_users_email ON users(email)`);
 }
 
 async function seedAdminUser() {

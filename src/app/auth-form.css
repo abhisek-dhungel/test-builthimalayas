@@ -179,6 +179,29 @@
   color: #b91c1c;
 }
 
+.auth-success {
+  border-radius: 0.875rem;
+  border: 1px solid rgba(74, 222, 128, 0.45);
+  background: rgba(220, 252, 231, 0.65);
+  backdrop-filter: blur(8px);
+  padding: 0.7rem 0.85rem;
+  font-size: 0.875rem;
+  color: #166534;
+}
+
+.auth-forgot-password {
+  margin-top: -0.4rem;
+  text-align: right;
+  font-size: 0.8rem;
+}
+
+.auth-forgot-password a {
+  color: var(--lg-blue-deep);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .auth-submit {
   width: 100%;
   margin-top: 0.25rem;

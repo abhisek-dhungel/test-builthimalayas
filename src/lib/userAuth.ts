@@ -49,17 +49,23 @@ async function setUserSession(userId: number) {
 
 export async function signupUser(input: {
   name: string;
+  email: string;
   phone: string;
   address?: string;
   password: string;
 }): Promise<{ ok: true } | { ok: false; error: string }> {
   const name = input.name.trim();
+  const email = input.email.trim().toLowerCase();
   const phone = input.phone.trim().replace(/\s+/g, "");
   const address = input.address?.trim() || null;
   const password = input.password;
 
-  if (!name || !phone || !password) {
-    return { ok: false, error: "Name, phone, and password are required." };
+  if (!name || !email || !phone || !password) {
+    return { ok: false, error: "Name, email, phone, and password are required." };
+  }
+
+  if (!isValidEmail(email)) {
+    return { ok: false, error: "Enter a valid email address." };
   }
 
   if (password.length < 3) {
@@ -74,14 +80,114 @@ export async function signupUser(input: {
     return { ok: false, error: "An account with this phone already exists." };
   }
 
+  const existingEmail = await dbGet<{ id: number }>(
+    "SELECT id FROM users WHERE email = ?",
+    [email],
+  );
+  if (existingEmail) {
+    return { ok: false, error: "An account with this email already exists." };
+  }
+
   const passwordHash = bcrypt.hashSync(password, 10);
   const result = await dbRun(
-    "INSERT INTO users (name, phone, address, password_hash) VALUES (?, ?, ?, ?)",
-    [name, phone, address, passwordHash],
+    "INSERT INTO users (name, email, phone, address, password_hash) VALUES (?, ?, ?, ?, ?)",
+    [name, email, phone, address, passwordHash],
   );
 
   await setUserSession(result.lastInsertRowid);
   return { ok: true };
+}
+
+function isValidEmail(email: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function getSqlDate(date: Date) {
+  return date.toISOString().slice(0, 19).replace("T", " ");
+}
+
+function getResetTokenHash(token: string) {
+  return crypto.createHash("sha256").update(token).digest("hex");
+}
+
+async function sendPasswordResetEmail(email: string, resetUrl: string) {
+  const apiKey = process.env.RESEND_API_KEY?.trim();
+  const from = process.env.EMAIL_FROM?.trim();
+
+  if (!apiKey || !from) {
+    if (process.env.NODE_ENV !== "production") {
+      console.info(`[auth] Password reset link for ${email}: ${resetUrl}`);
+      return;
+    }
+    throw new Error("Password reset email is not configured.");
+  }
+
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from,
+      to: [email],
+      subject: "Reset your Built Himalayas password",
+      html: `<p>We received a request to reset your password.</p><p><a href="${resetUrl}">Reset password</a></p><p>This link expires in one hour. If you did not request it, you can ignore this email.</p>`,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Password reset email could not be sent.");
+  }
+}
+
+export async function requestPasswordReset(email: string, appUrl: string) {
+  const cleanedEmail = email.trim().toLowerCase();
+  if (!isValidEmail(cleanedEmail)) return;
+
+  const user = await dbGet<{ id: number }>(
+    "SELECT id FROM users WHERE email = ?",
+    [cleanedEmail],
+  );
+  if (!user) return;
+
+  const token = crypto.randomBytes(32).toString("hex");
+  const tokenHash = getResetTokenHash(token);
+  const expiresAt = getSqlDate(new Date(Date.now() + 60 * 60 * 1000));
+
+  await dbRun("DELETE FROM password_reset_tokens WHERE user_id = ?", [user.id]);
+  await dbRun(
+    "INSERT INTO password_reset_tokens (user_id, token_hash, expires_at) VALUES (?, ?, ?)",
+    [user.id, tokenHash, expiresAt],
+  );
+
+  await sendPasswordResetEmail(
+    cleanedEmail,
+    `${appUrl}/reset-password?token=${encodeURIComponent(token)}`,
+  );
+}
+
+export async function resetPassword(token: string, password: string) {
+  if (!token || password.length < 3) {
+    return { ok: false as const, error: "Password must be at least 3 characters." };
+  }
+
+  const tokenHash = getResetTokenHash(token);
+  const reset = await dbGet<{ id: number; user_id: number }>(
+    `SELECT id, user_id FROM password_reset_tokens
+     WHERE token_hash = ? AND expires_at > CURRENT_TIMESTAMP`,
+    [tokenHash],
+  );
+  if (!reset) {
+    return { ok: false as const, error: "This password reset link is invalid or has expired." };
+  }
+
+  await dbRun("UPDATE users SET password_hash = ? WHERE id = ?", [
+    bcrypt.hashSync(password, 10),
+    reset.user_id,
+  ]);
+  await dbRun("DELETE FROM password_reset_tokens WHERE user_id = ?", [reset.user_id]);
+  return { ok: true as const };
 }
 
 export async function loginUser(
