@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, type ReactNode } from "react";
+import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import {
   DISTRICTS,
@@ -16,8 +17,15 @@ import {
 import { priceBandFromTarget, type SearchSort } from "@/lib/searchParams";
 import type { PublicListing } from "@/lib/types";
 import { ListingRowCard } from "./ListingRowCard";
-import { PersonalizedOrderModal } from "./PersonalizedOrderModal";
 import { PriceRangeSlider } from "./PriceRangeSlider";
+
+const PersonalizedOrderModal = dynamic(
+  () =>
+    import("./PersonalizedOrderModal").then(
+      (module) => module.PersonalizedOrderModal,
+    ),
+  { ssr: false },
+);
 
 const PRICE_MIN = 0;
 const PRICE_MAX = 200_000;

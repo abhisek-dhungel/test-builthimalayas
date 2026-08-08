@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
     root: projectRoot,
   },
   images: {
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
         protocol: "https",
@@ -23,6 +24,19 @@ const nextConfig: NextConfig = {
   // On Vercel, large videos go direct to Cloudinary from the browser.
   experimental: {
     proxyClientMaxBodySize: "105mb",
+  },
+  async headers() {
+    return [
+      {
+        source: "/uploads/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+    ];
   },
 };
 
