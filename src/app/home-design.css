@@ -1581,6 +1581,18 @@
   letter-spacing: 0.3px;
 }
 
+.home-design .footer-developer-link {
+  color: inherit;
+  font-weight: inherit;
+  font-size: inherit;
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+.home-design .footer-developer-link:hover {
+  color: #a9d8ff;
+}
+
 .home-design .footer-social-block {
   grid-column: auto;
 }
@@ -1588,7 +1600,7 @@
 .home-design .footer-support-btn {
   position: fixed;
   right: 24px;
-  bottom: 24px;
+  bottom: 40px;
   z-index: 70;
   display: inline-flex;
   align-items: center;
@@ -1661,7 +1673,7 @@
 @media (max-width: 640px) {
   .home-design .footer-support-btn {
     right: 16px;
-    bottom: 16px;
+    bottom: 28px;
     width: 54px;
     height: 54px;
   }

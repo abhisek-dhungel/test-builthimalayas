@@ -224,6 +224,14 @@ export function SiteFooter() {
 
           <div className="footer-bottom">
             <span>Copyright — Built Himalayas 2026 (All Rights Reserved)</span>
+            <a
+              className="footer-developer-link"
+              href="https://theaisquare.com"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Developed by: The AI Square
+            </a>
           </div>
         </div>
       </footer>
