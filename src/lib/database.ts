@@ -307,7 +307,7 @@ async function runMigrationsMysql() {
        WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'listings'
          AND INDEX_NAME = 'idx_listings_property_code'`,
     );
-    if (idxRows[0].length === 0) {
+    if (idxRows.length === 0) {
       await pool.execute(
         `CREATE UNIQUE INDEX idx_listings_property_code ON listings(property_code)`,
       );
