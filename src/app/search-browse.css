@@ -881,3 +881,15 @@
   background: var(--sb-navy-deep);
   border-color: var(--sb-navy-deep);
 }
+
+.search-row-btn-wa {
+  gap: 6px;
+  border: 1.5px solid #25d366;
+  background: #25d366;
+  color: #fff;
+}
+
+.search-row-btn-wa:hover {
+  background: #1eb857;
+  border-color: #1eb857;
+}
