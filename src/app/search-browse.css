@@ -115,9 +115,10 @@
   );
   color: #1a1208;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 800;
   line-height: 1;
   letter-spacing: 0.02em;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.28);
   text-transform: uppercase;
   padding: 0 18px;
   white-space: nowrap;
@@ -226,15 +227,15 @@
     flex: 1 1 0;
     min-width: 0;
     height: 30px;
-    padding: 0 8px;
-    gap: 3px;
-    font-size: 8.5px;
-    letter-spacing: 0.02em;
+    padding: 0 6px;
+    gap: 2px;
+    font-size: 9px;
+    letter-spacing: 0;
   }
 
   .search-browse-personalized-btn svg {
-    width: 9px;
-    height: 9px;
+    width: 8px;
+    height: 8px;
   }
 }
 
