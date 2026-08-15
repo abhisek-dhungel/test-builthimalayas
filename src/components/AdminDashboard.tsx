@@ -99,7 +99,11 @@ export function AdminDashboard() {
   }, [router]);
 
   useEffect(() => {
-    loadData();
+    const frame = window.requestAnimationFrame(() => {
+      void loadData();
+    });
+
+    return () => window.cancelAnimationFrame(frame);
   }, [loadData]);
 
   async function handleListingAction(id: number, action: string) {
@@ -916,6 +920,15 @@ function InquiryRow({
           onClick={() => onStatusChange(inquiry.id, "closed")}
         />
         <a
+          href={getWhatsAppHref(inquiry.phone)}
+          target="_blank"
+          rel="noreferrer"
+          className="rounded-full border border-[#25d366] px-3 py-1.5 text-xs font-semibold text-[#128c7e]"
+          aria-label={`Message ${inquiry.name} on WhatsApp`}
+        >
+          WhatsApp
+        </a>
+        <a
           href={`tel:${inquiry.phone}`}
           className="rounded-full border border-[var(--primary)] px-3 py-1.5 text-xs font-semibold text-[var(--primary)]"
         >
@@ -924,6 +937,15 @@ function InquiryRow({
       </div>
     </div>
   );
+}
+
+function getWhatsAppHref(phone: string): string {
+  const digits = phone.replace(/\D/g, "");
+  const internationalNumber = digits.startsWith("977")
+    ? digits
+    : `977${digits}`;
+
+  return `https://wa.me/${internationalNumber}`;
 }
 
 function OrderRow({
