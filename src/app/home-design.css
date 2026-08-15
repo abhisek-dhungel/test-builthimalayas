@@ -1271,14 +1271,14 @@
   margin-top: 51px;
   margin-bottom: 0;
   padding-left: 34px;
-  transform: scale(0.88);
+  transform: scale(1.144);
   transform-origin: left center;
   transition: opacity 0.15s ease, transform 0.15s ease;
 }
 
 .home-design .footer-logo:hover {
   opacity: 0.9;
-  transform: scale(0.88) translateY(-1px);
+  transform: scale(1.144) translateY(-1px);
 }
 
 .home-design .footer-brand {
