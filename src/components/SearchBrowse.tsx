@@ -2,6 +2,7 @@
 
 import { useMemo, useState, type ReactNode } from "react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
   DISTRICTS,
@@ -339,24 +340,32 @@ export function SearchBrowse({ listings }: SearchBrowseProps) {
       <div className="search-browse-inner">
         <div className="search-browse-kicker-row">
           <p className="search-browse-kicker">Filter from all listings</p>
-          <button
-            type="button"
-            className="search-browse-personalized-btn"
-            onClick={() => setShowPersonalizedOrder(true)}
-          >
-            Personalized order
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              strokeWidth="2.4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden
+          <div className="search-browse-action-buttons">
+            <Link
+              href="/list"
+              className="search-browse-personalized-btn search-browse-list-btn"
             >
-              <path d="M5 12h14" />
-              <path d="M13 6l6 6-6 6" />
-            </svg>
-          </button>
+              List your property
+            </Link>
+            <button
+              type="button"
+              className="search-browse-personalized-btn"
+              onClick={() => setShowPersonalizedOrder(true)}
+            >
+              Personalized order
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                strokeWidth="2.4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
+              >
+                <path d="M5 12h14" />
+                <path d="M13 6l6 6-6 6" />
+              </svg>
+            </button>
+          </div>
         </div>
 
         <div className="search-browse-mobile-bar">
