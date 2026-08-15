@@ -1009,6 +1009,21 @@ function OrderRow({
           label="Close"
           onClick={() => onStatusChange(order.id, "closed")}
         />
+        <a
+          href={getWhatsAppHref(order.phone)}
+          target="_blank"
+          rel="noreferrer"
+          className="rounded-full border border-[#25d366] px-3 py-1.5 text-xs font-semibold text-[#128c7e]"
+          aria-label={`Message ${order.name} on WhatsApp`}
+        >
+          WhatsApp
+        </a>
+        <a
+          href={`tel:${order.phone}`}
+          className="rounded-full border border-[var(--primary)] px-3 py-1.5 text-xs font-semibold text-[var(--primary)]"
+        >
+          Call
+        </a>
       </div>
     </div>
   );
