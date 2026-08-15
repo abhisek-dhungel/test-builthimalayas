@@ -240,9 +240,7 @@
   box-shadow: 0 1px 0 rgba(18, 59, 102, 0.22);
 }
 
-/* Smaller header variant of the List Your Property button.
-   Matches the Log In button style: navy outline, transparent fill,
-   blue on hover. */
+/* Compact header variant that keeps the primary button treatment. */
 .home-design .btn-list-property--sm {
   justify-self: auto;
   box-sizing: border-box;
@@ -251,31 +249,13 @@
   font-size: 12px;
   line-height: 1;
   letter-spacing: 0.02em;
-  animation: none;
-  background: transparent;
-  border: 1.5px solid var(--hd-navy);
-  color: var(--hd-navy);
   font-weight: 600;
-  overflow: visible;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   white-space: nowrap;
   gap: 6px;
   min-width: 130px;
-  box-shadow: 0 3px 0 rgba(18, 59, 102, 0.22);
-}
-
-.home-design .btn-list-property--sm::before {
-  display: none;
-}
-
-.home-design .btn-list-property--sm:hover {
-  background: #123b66;
-  border-color: #123b66;
-  color: #fff;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 12px rgba(18, 59, 102, 0.24);
 }
 
 @keyframes listPropertyPulse {
