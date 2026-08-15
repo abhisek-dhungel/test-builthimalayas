@@ -821,6 +821,12 @@ function ListingRow({
             />
           ))}
         <ActionBtn
+          label={listing.verified === 1 ? "Verified" : "Mark Verified"}
+          success
+          disabled={listing.verified === 1}
+          onClick={() => onAction(listing.id, "verify")}
+        />
+        <ActionBtn
           label="Delete"
           danger
           onClick={() => {
@@ -1059,19 +1065,26 @@ function ActionBtn({
   onClick,
   primary,
   danger,
+  success,
+  disabled,
 }: {
   label: string;
   onClick: () => void;
   primary?: boolean;
   danger?: boolean;
+  success?: boolean;
+  disabled?: boolean;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-lg px-3 py-1.5 text-xs font-medium ${
+      disabled={disabled}
+      className={`rounded-lg px-3 py-1.5 text-xs font-medium disabled:cursor-default ${
         danger
           ? "border border-red-200 bg-red-50 text-red-700"
+          : success
+            ? "border border-emerald-600 bg-emerald-600 text-white"
           : primary
             ? "bg-[var(--accent)] text-white"
             : "border border-[var(--border)] bg-[var(--bg)]"

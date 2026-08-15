@@ -129,6 +129,7 @@ async function runMigrationsMysql() {
       video_path TEXT NULL,
       status ENUM('pending', 'active', 'stopped', 'taken', 'contacted') NOT NULL DEFAULT 'pending',
       featured TINYINT(1) NOT NULL DEFAULT 0,
+      verified TINYINT(1) NOT NULL DEFAULT 0,
       property_code INT NULL,
       created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
@@ -304,6 +305,11 @@ async function runMigrationsMysql() {
         `ALTER TABLE listings ADD COLUMN video_path TEXT NULL`,
       );
     }
+    if (!columns.has("verified")) {
+      await pool.execute(
+        `ALTER TABLE listings ADD COLUMN verified TINYINT(1) NOT NULL DEFAULT 0`,
+      );
+    }
     if (!columns.has("property_code")) {
       await pool.execute(
         `ALTER TABLE listings ADD COLUMN property_code INT NULL`,
@@ -365,6 +371,7 @@ function runMigrationsSqlite() {
       video_path TEXT,
       status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending', 'active', 'stopped', 'taken', 'contacted')),
       featured INTEGER NOT NULL DEFAULT 0,
+      verified INTEGER NOT NULL DEFAULT 0,
       property_code INTEGER UNIQUE,
       created_at TEXT NOT NULL DEFAULT (datetime('now'))
     );
@@ -493,6 +500,9 @@ function runMigrationsSqlite() {
   if (!names.has("video_path")) {
     db.exec(`ALTER TABLE listings ADD COLUMN video_path TEXT`);
   }
+  if (!names.has("verified")) {
+    db.exec(`ALTER TABLE listings ADD COLUMN verified INTEGER NOT NULL DEFAULT 0`);
+  }
 
   // --- property_code (unique, starting from 1001) ---
   // Add column + backfill BEFORE any table rebuild so the rebuild can carry
@@ -549,6 +559,7 @@ function runMigrationsSqlite() {
           video_path TEXT,
           status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending', 'active', 'stopped', 'taken', 'contacted')),
           featured INTEGER NOT NULL DEFAULT 0,
+          verified INTEGER NOT NULL DEFAULT 0,
           property_code INTEGER UNIQUE,
           created_at TEXT NOT NULL DEFAULT (datetime('now'))
         )
@@ -557,12 +568,12 @@ function runMigrationsSqlite() {
         INSERT INTO listings (
           id, district, place, landmark, property_type, property_details, price,
           parking_two_wheeler, parking_four_wheeler, other_facilities, name, phone, role,
-          image_path, image_paths, video_path, status, featured, property_code, created_at
+          image_path, image_paths, video_path, status, featured, verified, property_code, created_at
         )
         SELECT
           id, district, place, landmark, property_type, property_details, price,
           parking_two_wheeler, parking_four_wheeler, other_facilities, name, phone, role,
-          image_path, image_paths, video_path, status, featured, property_code, created_at
+          image_path, image_paths, video_path, status, featured, verified, property_code, created_at
         FROM listings_legacy
       `);
       db.exec("DROP TABLE listings_legacy");

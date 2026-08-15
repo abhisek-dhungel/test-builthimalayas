@@ -11,6 +11,7 @@ import {
 } from "@/lib/property";
 import { FavoriteButton } from "../FavoriteButton";
 import { ParkingPills } from "../ParkingPills";
+import { VerifiedBadge } from "../VerifiedBadge";
 import { VisitModal } from "../VisitModal";
 
 export function VerifiedListingCard({ listing }: { listing: PublicListing }) {
@@ -41,9 +42,12 @@ export function VerifiedListingCard({ listing }: { listing: PublicListing }) {
 
         <div className="listing-body">
           <div className="listing-top-row">
-            <span className="tag-pill">
-              {getPropertyTypeLabel(listing.property_type)}
-            </span>
+            <div className="flex min-w-0 items-center gap-1.5">
+              <span className="tag-pill">
+                {getPropertyTypeLabel(listing.property_type)}
+              </span>
+              {listing.verified === 1 && <VerifiedBadge />}
+            </div>
             <FavoriteButton listingId={listing.id} size="sm" />
           </div>
           <div className="listing-price">{formatPrice(listing.price)}</div>

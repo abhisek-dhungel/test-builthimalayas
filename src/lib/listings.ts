@@ -35,6 +35,7 @@ export function normalizeListing(row: Record<string, unknown>): Listing {
     parking_four_wheeler: Number(row.parking_four_wheeler) || 0,
     other_facilities: String(row.other_facilities ?? "").trim(),
     featured: Number(row.featured) || 0,
+    verified: Number(row.verified) || 0,
     status,
     image_paths,
     image_path,
@@ -77,7 +78,8 @@ const PUBLIC_LISTING_STATUSES = "('active', 'taken')";
 
 const LISTING_CARD_COLUMNS = `
   id, district, place, landmark, property_type, property_details, price,
-  parking_two_wheeler, parking_four_wheeler, image_path, status, featured, created_at
+  parking_two_wheeler, parking_four_wheeler, image_path, status, featured,
+  verified, created_at
 `;
 
 export async function getActiveListings(): Promise<PublicListing[]> {

@@ -11,6 +11,7 @@ import {
 } from "@/lib/property";
 import { FavoriteButton } from "./FavoriteButton";
 import { ParkingPills } from "./ParkingPills";
+import { VerifiedBadge } from "./VerifiedBadge";
 import { VisitModal } from "./VisitModal";
 
 type ListingCardProps = {
@@ -64,10 +65,14 @@ export function ListingCard({ listing, layout = "grid" }: ListingCardProps) {
 
         <div className={`p-3 ${isDesktopGrid ? "lg:p-4" : ""}`}>
           <div className="flex items-center justify-between gap-2">
-            <Link href={`/listing/${listing.id}`} className="min-w-0">
+            <Link
+              href={`/listing/${listing.id}`}
+              className="flex min-w-0 items-center gap-1.5"
+            >
               <span className="inline-block rounded-full bg-[var(--surface-muted)] px-2.5 py-0.5 text-[10px] font-medium text-[var(--text)] lg:text-xs">
                 {getPropertyTypeLabel(listing.property_type)}
               </span>
+              {listing.verified === 1 && <VerifiedBadge />}
             </Link>
             <FavoriteButton listingId={listing.id} size="sm" />
           </div>

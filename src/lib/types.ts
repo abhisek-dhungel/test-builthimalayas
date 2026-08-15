@@ -28,6 +28,7 @@ export interface Listing {
   video_path: string | null;
   status: ListingStatus;
   featured: number;
+  verified: number;
   property_code: number | null;
   created_at: string;
 }

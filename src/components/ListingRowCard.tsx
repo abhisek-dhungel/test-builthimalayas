@@ -12,6 +12,7 @@ import {
 } from "@/lib/property";
 import { FavoriteButton } from "./FavoriteButton";
 import { ParkingPills } from "./ParkingPills";
+import { VerifiedBadge } from "./VerifiedBadge";
 import { VisitModal } from "./VisitModal";
 
 type ListingRowCardProps = {
@@ -78,7 +79,7 @@ export function ListingRowCard({ listing }: ListingRowCardProps) {
                 </div>
               )}
               {listing.featured === 1 && (
-                <span className="search-row-badge">Verified</span>
+                <span className="search-row-badge">Featured</span>
               )}
               {isTaken && (
                 <span className="search-row-badge is-taken">Taken</span>
@@ -88,9 +89,12 @@ export function ListingRowCard({ listing }: ListingRowCardProps) {
 
           <div className="search-row-body">
             <div className="search-row-top">
-              <span className="search-row-type">
-                {getPropertyTypeLabel(listing.property_type)}
-              </span>
+              <div className="flex min-w-0 items-center gap-1.5">
+                <span className="search-row-type">
+                  {getPropertyTypeLabel(listing.property_type)}
+                </span>
+                {listing.verified === 1 && <VerifiedBadge />}
+              </div>
               <FavoriteButton listingId={listing.id} size="sm" />
             </div>
 

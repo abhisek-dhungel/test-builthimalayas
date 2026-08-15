@@ -10,6 +10,7 @@ import {
 } from "@/lib/property";
 import { FavoriteButton } from "./FavoriteButton";
 import { ParkingPills } from "./ParkingPills";
+import { VerifiedBadge } from "./VerifiedBadge";
 import { VisitModal } from "./VisitModal";
 
 export function ListingDetailView({ listing }: { listing: PublicListing }) {
@@ -125,9 +126,12 @@ export function ListingDetailView({ listing }: { listing: PublicListing }) {
 
         <article className="flex min-h-0 flex-col p-4 sm:p-5 lg:p-6">
           <div className="flex shrink-0 items-start justify-between gap-3">
-            <span className="inline-block rounded-full bg-[var(--surface-muted)] px-2.5 py-1 text-xs font-medium">
-              {getPropertyTypeLabel(listing.property_type)}
-            </span>
+            <div className="flex min-w-0 items-center gap-1.5">
+              <span className="inline-block rounded-full bg-[var(--surface-muted)] px-2.5 py-1 text-xs font-medium">
+                {getPropertyTypeLabel(listing.property_type)}
+              </span>
+              {listing.verified === 1 && <VerifiedBadge />}
+            </div>
             <FavoriteButton listingId={listing.id} />
           </div>
 

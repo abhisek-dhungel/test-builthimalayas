@@ -99,6 +99,11 @@ export async function PATCH(request: NextRequest, { params }: Params) {
       return NextResponse.json({ success: true });
     }
 
+    if (body.action === "verify") {
+      await dbRun("UPDATE listings SET verified = 1 WHERE id = ?", [Number(id)]);
+      return NextResponse.json({ success: true });
+    }
+
     return NextResponse.json({ error: "Invalid action." }, { status: 400 });
   } catch (error) {
     console.error("Admin listing action failed:", error);
