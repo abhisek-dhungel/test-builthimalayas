@@ -122,19 +122,6 @@
   justify-content: center;
 }
 
-.search-browse-list-btn {
-  border-color: rgba(255, 235, 190, 0.55);
-  background: linear-gradient(
-    135deg,
-    #e2bc7a 0%,
-    var(--sb-bronze-light) 35%,
-    var(--sb-bronze) 78%,
-    #8a5f28 100%
-  );
-  color: #1a1208;
-  box-shadow: 0 4px 0 rgba(89, 59, 23, 0.28), 0 8px 16px rgba(89, 59, 23, 0.16);
-}
-
 .search-browse-personalized-btn svg {
   width: 11px;
   height: 11px;
@@ -162,10 +149,11 @@
   }
 
   .search-browse-kicker {
-    width: 100%;
+    display: none;
   }
 
   .search-browse-action-buttons {
+    order: 1;
     width: 100%;
     gap: 6px;
     margin-left: 0;
@@ -180,10 +168,6 @@
     font-size: 8.5px;
     letter-spacing: 0.02em;
     box-shadow: 0 2px 0 rgba(18, 59, 102, 0.2);
-  }
-
-  .search-browse-list-btn {
-    box-shadow: 0 2px 0 rgba(89, 59, 23, 0.25);
   }
 
   .search-browse-personalized-btn svg {

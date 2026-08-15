@@ -343,7 +343,7 @@ export function SearchBrowse({ listings }: SearchBrowseProps) {
           <div className="search-browse-action-buttons">
             <Link
               href="/list"
-              className="search-browse-personalized-btn search-browse-list-btn"
+              className="search-browse-personalized-btn"
             >
               List your property
             </Link>
