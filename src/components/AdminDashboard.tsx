@@ -24,9 +24,9 @@ type Tab =
 
 const TAB_LABELS: Record<Tab, string> = {
   listings: "All Listings",
-  orders: "New Orders",
-  "custom-orders": "Custom Orders",
-  inquiries: "Inquiries",
+  orders: "Visit Order",
+  "custom-orders": "Personalized Order",
+  inquiries: "Enquiries",
   news: "News",
   users: "Users",
   favorites: "Kept in Favourite",
@@ -403,7 +403,7 @@ export function AdminDashboard() {
             ))}
             {orders.length === 0 && (
               <p className="text-sm text-[var(--muted)]">
-                No new visit requests right now.
+                No visit orders right now.
               </p>
             )}
           </div>
@@ -418,7 +418,7 @@ export function AdminDashboard() {
             ))}
             {customOrders.length === 0 && (
               <p className="text-sm text-[var(--muted)]">
-                No custom orders right now.
+                No personalized orders right now.
               </p>
             )}
           </div>
@@ -433,7 +433,7 @@ export function AdminDashboard() {
             ))}
             {inquiries.length === 0 && (
               <p className="text-sm text-[var(--muted)]">
-                No new inquiries right now.
+                No new enquiries right now.
               </p>
             )}
           </div>
@@ -714,6 +714,11 @@ function ListingRow({
 
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
+            {listing.property_code != null && (
+              <span className="whitespace-nowrap text-sm font-extrabold text-[var(--primary)]">
+                Code #{listing.property_code}
+              </span>
+            )}
             <span className="text-sm font-semibold text-[var(--text)]">
               {listing.place}
             </span>
@@ -749,11 +754,6 @@ function ListingRow({
           <p className="mt-2 text-sm font-semibold text-[var(--primary)]">
             {formatPrice(listing.price)}
           </p>
-          {listing.property_code != null && (
-            <p className="mt-1 text-xs text-[var(--text)]">
-              Code #{listing.property_code}
-            </p>
-          )}
           <p className="mt-1 text-sm text-[var(--text)]">
             {listing.name} · {listing.phone}
           </p>
