@@ -105,27 +105,49 @@
   border-radius: 999px;
   min-width: 130px;
   height: 36px;
-  border: 1.5px solid #0b2f52;
-  background: linear-gradient(180deg, #1d4f7f 0%, var(--sb-navy) 100%);
-  color: #fff;
+  border: 1px solid rgba(255, 235, 190, 0.55);
+  background: linear-gradient(
+    135deg,
+    #e2bc7a 0%,
+    var(--sb-bronze-light) 35%,
+    var(--sb-bronze) 78%,
+    #8a5f28 100%
+  );
+  color: #1a1208;
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 600;
   line-height: 1;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   padding: 0 18px;
   white-space: nowrap;
   cursor: pointer;
-  box-shadow:
-    0 4px 0 #0b2f52,
-    0 8px 16px rgba(18, 59, 102, 0.24);
+  box-shadow: 0 4px 0 rgba(89, 59, 23, 0.28), 0 8px 16px rgba(89, 59, 23, 0.16);
   transition:
-    transform 0.15s ease,
-    background 0.15s ease,
-    box-shadow 0.15s ease;
+    transform 0.18s ease,
+    filter 0.18s ease;
   text-decoration: none;
   justify-content: center;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  animation: searchBrowseButtonPulse 2.2s ease-in-out infinite;
   -webkit-tap-highlight-color: transparent;
+}
+
+.search-browse-personalized-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.35) 45%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  animation: searchBrowseButtonShine 3.2s ease-in-out infinite;
+  z-index: -1;
 }
 
 .search-browse-personalized-btn svg {
@@ -136,24 +158,51 @@
 }
 
 .search-browse-personalized-btn:hover {
-  background: linear-gradient(180deg, #276292 0%, #174a78 100%);
-  border-color: #0b2f52;
-  transform: translateY(-2px);
-  box-shadow:
-    0 5px 0 #082641,
-    0 11px 20px rgba(18, 59, 102, 0.3);
+  background: #123b66;
+  border-color: transparent;
+  color: #fff;
+  transform: translateY(-2px) scale(1.03);
+  filter: none;
+  box-shadow: 0 5px 12px rgba(18, 59, 102, 0.26);
+  animation: none;
 }
 
 .search-browse-personalized-btn:active {
-  transform: translateY(3px);
-  box-shadow:
-    0 1px 0 #082641,
-    0 3px 7px rgba(18, 59, 102, 0.22);
+  transform: translateY(1px) scale(0.99);
+  box-shadow: 0 1px 0 rgba(18, 59, 102, 0.22);
 }
 
 .search-browse-personalized-btn:focus-visible {
   outline: 3px solid rgba(205, 163, 106, 0.55);
   outline-offset: 3px;
+}
+
+@keyframes searchBrowseButtonPulse {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.08);
+  }
+}
+
+@keyframes searchBrowseButtonShine {
+  0%,
+  55% {
+    transform: translateX(-120%);
+  }
+  75%,
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .search-browse-personalized-btn,
+  .search-browse-personalized-btn::before {
+    animation: none;
+  }
 }
 
 @media (max-width: 640px) {
@@ -181,9 +230,6 @@
     gap: 3px;
     font-size: 8.5px;
     letter-spacing: 0.02em;
-    box-shadow:
-      0 3px 0 #0b2f52,
-      0 6px 12px rgba(18, 59, 102, 0.22);
   }
 
   .search-browse-personalized-btn svg {
